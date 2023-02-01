@@ -5,19 +5,21 @@ import './index.css';
 import Home from './pages/Home.js';
 import Edit from './pages/Edit.js';
 import Share from './pages/Share.js';
+import Bar from './pages/Bar.js';
 
 export default function App() {
-return(
-    <BrowserRouter>
-        <Routes>
-            <Route path ="home" element ={<Home />}></Route>
-            <Route path ="Share" element ={<Share />}></Route>
-            <Route path ="edit" element ={<Edit />}></Route>
+    return (
+        <BrowserRouter>
+            <Routes>
+                <Route path='/' element ={<Bar />}>
+                    <Route index element ={<Home />}></Route>
+                    <Route path ="share" element ={<Share />}></Route>
+                    <Route path ="edit" element ={<Edit />}></Route>
+                </Route> 
 
-        </Routes>
-    </BrowserRouter>
-);
-
+            </Routes>
+        </BrowserRouter>
+    );
 }
 
 createRoot(document.getElementById('root')).render(<App />)

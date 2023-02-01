@@ -1,0 +1,19 @@
+.flex-container 
+{
+    display: flex;
+}
+			
+.home-div 
+{
+	margin: 10px;
+	padding-left: 10px; 
+	padding-right: 30px;
+	font-size: 30px;
+	border-right: 5px solid black;
+}
+
+.linkbar
+{
+    color: inherit;
+    text-decoration: inherit;
+}
