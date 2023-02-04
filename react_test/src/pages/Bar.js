@@ -8,10 +8,10 @@ export default function Bar() {
 				<Link to="/" class = "linkbar">Home</Link>
 			</div>
 			<div class = "home-div">
-				<Link to="/Share" class = "linkbar">Share</Link>
+				<Link to="/Create" class = "linkbar">Create</Link>
 			</div>
 			<div class = "home-div">
-				<Link to="/Edit" class = "linkbar">Edit</Link>
+				<Link to="/Browse" class = "linkbar">Browse</Link>
 			</div>
 		</div>
 

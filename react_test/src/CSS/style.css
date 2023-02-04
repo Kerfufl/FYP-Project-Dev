@@ -2,6 +2,17 @@
 {
     display: flex;
 }
+.flextest 
+{
+    display: flex;
+}
+.choice{
+    border: 2px solid black;
+	justify-content: center;
+	width: 35%; 
+    text-align: center;
+    margin: auto;
+}
 			
 .home-div 
 {

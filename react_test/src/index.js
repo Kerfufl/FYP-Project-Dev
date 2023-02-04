@@ -3,8 +3,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import './index.css';
 //import App from './App'
 import Home from './pages/Home.js';
-import Edit from './pages/Edit.js';
-import Share from './pages/Share.js';
+import Create from './pages/Create.js';
+import Browse from './pages/Browse.js';
 import Bar from './pages/Bar.js';
 
 export default function App() {
@@ -13,8 +13,8 @@ export default function App() {
             <Routes>
                 <Route path='/' element ={<Bar />}>
                     <Route index element ={<Home />}></Route>
-                    <Route path ="share" element ={<Share />}></Route>
-                    <Route path ="edit" element ={<Edit />}></Route>
+                    <Route path ="Browse" element ={<Browse />}></Route>
+                    <Route path ="Create" element ={<Create />}></Route>
                 </Route> 
 
             </Routes>
