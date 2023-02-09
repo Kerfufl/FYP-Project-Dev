@@ -1,5 +1,5 @@
-import React, {useRef,useState} from 'react';
-import {Canvas, useFrame, useLoader} from '@react-three/fiber'
+import React, {useRef} from 'react';
+import {Canvas, useLoader} from '@react-three/fiber'
 import { TextureLoader } from 'three';
 import { OrbitControls } from '@react-three/drei';
 
@@ -22,7 +22,7 @@ export default function Edit()
                 <boxGeometry args={[16,9,.01]}/>
                 {/* //<planeGeometry args={[16,9,1]}/> */}
                 <meshStandardMaterial map={b} />
-             
+                
             </mesh>
         )
     }
@@ -30,7 +30,7 @@ export default function Edit()
         <>
         
         
-        <div style = {{height:'90%',border:'2px solid black', justifyContent: 'center'}}>
+        <div style = {{height:'90%',border:'2px solid black'}}>
         <Canvas>
                 <ambientLight/>
                 {/* <pointLight /> */}

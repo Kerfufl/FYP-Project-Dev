@@ -14,6 +14,7 @@ export default function Bar() {
 				<Link to="/Browse" class = "linkbar">Browse</Link>
 			</div>
 		</div>
+		
 
         <Outlet/>
         </>

@@ -8,9 +8,9 @@
 }
 .choice{
     border: 2px solid black;
-	justify-content: center;
+	/* justify-content: center;
 	width: 35%; 
-    text-align: center;
+    text-align: center; */
     margin: auto;
 }
 			
@@ -27,4 +27,10 @@
 {
     color: inherit;
     text-decoration: inherit;
+}
+
+#share {
+	justify-content: center; 
+	gap: 10px;
+	flex-wrap:wrap;
 }
