@@ -3,7 +3,7 @@ import { extend, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 
 
-extend({BoxCreate3D});
+extend({Box, useRef});
 
 export function Box(props)
     {
