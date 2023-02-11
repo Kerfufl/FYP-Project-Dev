@@ -1,16 +1,14 @@
 import React, {useRef} from 'react';
-import {Canvas, useLoader} from '@react-three/fiber'
+import {Canvas, useLoader} from '@react-three/fiber';
 import { TextureLoader } from 'three';
 import { OrbitControls } from '@react-three/drei';
 
-
-export default function Edit() 
-{
-    function Box(props)
+export function Box(props)
     {
         const ref = useRef();
         const text = require("../img/In the Court of the Stone Defender.png")
         const b =useLoader(TextureLoader,text)
+        
         
         //useFrame((state,delta) => (ref.current.rotation.x += delta))
 
@@ -26,14 +24,17 @@ export default function Edit()
             </mesh>
         )
     }
+export default function Create() 
+{
+    
     return(
         <>
         
         
         <div style = {{height:'90%',border:'2px solid black'}}>
+            
         <Canvas>
                 <ambientLight/>
-                {/* <pointLight /> */}
                 
                 <Box position = {[-1.2,0,-2]}/>
                 <OrbitControls />
