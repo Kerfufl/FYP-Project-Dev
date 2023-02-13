@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, {useRef, useState} from 'react';
 import {Canvas, useLoader} from '@react-three/fiber';
 import { TextureLoader } from 'three';
 import { OrbitControls } from '@react-three/drei';
@@ -24,9 +24,16 @@ export function Box(props)
             </mesh>
         )
     }
+
+
+
+
 export default function Create() 
 {
-    
+    const {selImg, setSelImg} = useState(null)
+    const imgHandle = (e) => {
+        setSelImg(e.target.files[0])
+    }
     return(
         <>
         
@@ -40,7 +47,21 @@ export default function Create()
                 <OrbitControls />
         </Canvas>
         </div>
-
+        {setSelImg && (
+            <img src={setSelImg? URL.createObjectURL(setSelImg): null} alt={'bruh'}/>
+        )}
+        <input 
+        type={'file'} 
+        onChange= {imgHandle} 
+        //     {
+        //     // const egk = e.target.files[0];
+        //     // console.log(egk);
+        //     // setSelImg(prev => egk);
+        //     // console.log(selImg);
+        //     imgHandle;
+        // }
+        />
+        
         
         </>
     );
