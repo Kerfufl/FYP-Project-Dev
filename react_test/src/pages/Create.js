@@ -3,14 +3,13 @@ import {Canvas, useLoader} from '@react-three/fiber';
 import { TextureLoader} from 'three';
 import { OrbitControls } from '@react-three/drei';
 import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter';
-import { OBJExporter} from 'three/examples/jsm/exporters/OBJExporter';
 
 var text = require("../img/In the Court of the Stone Defender.png")
 export function Box(props)
     {
         const ref = useRef();
-        //const text = require("../img/In the Court of the Stone Defender.png")
-        const b =useLoader(TextureLoader,props.i)
+        const text = require("../img/In the Court of the Stone Defender.png")
+        const b =useLoader(TextureLoader,text)
         
         
         //useFrame((state,delta) => (ref.current.rotation.x += delta))

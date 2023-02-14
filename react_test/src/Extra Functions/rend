@@ -1,27 +1,25 @@
 import React, {useRef, useState} from 'react';
 import { extend, useThree } from '@react-three/fiber';
-import * as THREE from 'three';
+import {TextureLoader} from 'three';
 
 
-extend({Box, useRef});
+export function BoxRend(props)
+{
+    const ref = useRef();
+    const text = require("../img/In the Court of the Stone Defender.png")
+    const b =useLoader(TextureLoader,props.i)
+    
+    
+    //useFrame((state,delta) => (ref.current.rotation.x += delta))
 
-export function Box(props)
-    {
-        const ref = useRef();
-        const text = require("../img/In the Court of the Stone Defender.png")
-        const b =useLoader(TextureLoader,text)
-        
-        
-        //useFrame((state,delta) => (ref.current.rotation.x += delta))
-
-        return (
-            <mesh
-                {...props}
-                ref={ref}
-            >
-                <boxGeometry args={[16,9,.01]}/>
-                <meshStandardMaterial map={b} />
-                
-            </mesh>
-        )
-    }
+    return (
+        <mesh
+            {...props}
+            ref={ref}
+        >
+            <boxGeometry attach = "geometry" args={[16,9,.01]}/>
+            <meshStandardMaterial attach ="material"map={b} />
+            
+        </mesh>
+    )
+}
