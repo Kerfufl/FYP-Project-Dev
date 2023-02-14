@@ -1,6 +1,6 @@
 import React, {useRef, useState} from 'react';
 import {Canvas, useLoader} from '@react-three/fiber';
-import { TextureLoader, BoxGeometry, MeshStandardMaterial, Mesh } from 'three';
+import { TextureLoader} from 'three';
 import { OrbitControls } from '@react-three/drei';
 import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter';
 import { OBJExporter} from 'three/examples/jsm/exporters/OBJExporter';
@@ -20,8 +20,8 @@ export function Box(props)
                 {...props}
                 ref={ref}
             >
-                <boxGeometry args={[16,9,.01]}/>
-                <meshStandardMaterial map={b} />
+                <boxGeometry attach = "geometry" args={[16,9,.01]}/>
+                <meshStandardMaterial attach ="material"map={b} />
                 
             </mesh>
         )
@@ -45,31 +45,30 @@ export default function Create()
 
     
     const expHand = () => {
-        //const exporter = new GLTFExporter()
-        const exporter = new OBJExporter()
-        const res = exporter.parse(
+        const exporter = new GLTFExporter()
+        //const exporter = new OBJExporter()
+        exporter.parse(
             canvasRef.current,
-            (result) => {},
+            (gltf) => {
+                const output = JSON.stringify(gltf)
+                console.log(output)
+                
+                const glbBlob = new Blob([gltf], { type: 'application/octet-stream'})
+                const link = document.createElement('a')
+                link.href = URL.createObjectURL(glbBlob)
+                link.download = 'model.glb';
+
+                document.body.appendChild(link)
+                link.click()
+                document.body.removeChild(link)
+            },
             (error) => { console.log(error)},
-            (group) => {
-                const mesh = new Mesh(
-                    new BoxGeometry(1, 1, 1),
-                    new MeshStandardMaterial({ color: 0xff0000 })
-                )
-                group.add(mesh)
-            })
-        const output = JSON.stringify(res)
-        console.log(res)
-
-        const blob = new Blob([res, {type: 'application/octet-stream'}])
-
-        const link = document.createElement('a')
-        link.href = URL.createObjectURL(blob)
-        link.download = 'model.obj';
-
-        document.body.appendChild(link)
-        link.click()
-        document.body.removeChild(link)
+            {
+                binary: true,
+                includeCustomExtensions: true,
+            }
+            )
+        
     }
     return(
         <>
