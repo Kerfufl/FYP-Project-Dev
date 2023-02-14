@@ -28,7 +28,7 @@ export default function Share()
     //     )
     // }
     const [divList,setDivList] = useState([{comp: ''},{comp: ''},{comp: ''},{comp: ''}])
-
+    var text = require("../img/In the Court of the Stone Defender.png")
     const addDiv = () => {
         setDivList([...divList, {comp: ""}])
 }
@@ -61,7 +61,7 @@ export default function Share()
                 <Canvas style={{width:300,height:260, margin:'auto', border:"2px black solid"}}>
                     <ambientLight/>
                     
-                    <Box position = {[0,0,-6]} />
+                    <Box position = {[0,0,-6]} i ={text} />
                     <OrbitControls />
                 </Canvas>
 			</div>
