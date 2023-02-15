@@ -4,11 +4,10 @@ import { TextureLoader} from 'three';
 import { OrbitControls } from '@react-three/drei';
 import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter';
 
-import { getStorage,ref,getDownloadURL, uploadBytesResumable } from 'firebase/storage'
+import { getStorage,ref,uploadBytesResumable } from 'firebase/storage'
 import initStor from '../components/firebaseInit'
 
 const stor = getStorage(initStor)
-console.log(stor)
 
 var text = require("../img/In the Court of the Stone Defender.png")
 export function Box(props)
@@ -51,7 +50,9 @@ export default function Create()
     const canvasRef = useRef(null)
 
     
-    const expHand = () => {
+    const exportHandler = (upl=true) => {
+        
+        
         const exporter = new GLTFExporter()
         //const exporter = new OBJExporter()
         exporter.parse(
@@ -60,31 +61,41 @@ export default function Create()
                 const output = JSON.stringify(gltf)
                 //console.log(output)
                 
-                const storRef = ref(stor,'modelMeta.glb')
+                
+                
                 const glbBlob = new Blob([gltf], { type: 'application/octet-stream'})
                 
-                const metadata = {
-                    contentType: 'model/glb'
-                }
-                const upTask = uploadBytesResumable(storRef, glbBlob, metadata)
-                
-                upTask.on("state_changed", () => {
-                    getDownloadURL(upTask.snapshot.ref)
-                })
-                // fileRef.put(glbBlob.then(() => {
-                //     console.log("Done")
-                // }).catch((error)=>{
-                //     console.log("Oops:", error)
-                // }))
-                
-                // const link = document.createElement('a')
-                // link.href = URL.createObjectURL(glbBlob)
-                // console.log(link.href)
-                //link.download = 'model.glb';
+                    
+                if (upl)   
+                {
+                    const storRef = ref(stor,'modelMeta2.glb')
+                    const metadata = 
+                    {
+                        contentType: 'model/glb',
+                        customMetaData: {
+                            'user': 'Eoin',
+                            'shape' : 'flat'
+                        }
+                    }
+                    const upTask = uploadBytesResumable(storRef, glbBlob, metadata)
+                        
+                    upTask.on("state_changed", () => {})
+            }
 
-                // document.body.appendChild(link)
-                // link.click()
-                // document.body.removeChild(link)
+                else
+                {
+                    console.log("direct download goes here")
+                    const link = document.createElement('a')
+                    link.href = URL.createObjectURL(glbBlob)
+                    console.log(link.href)
+                    link.download = 'model.glb';
+
+                    document.body.appendChild(link)
+                    link.click()
+                    document.body.removeChild(link)
+            }
+                    
+                
             },
             (error) => { console.log(error)},
             {
@@ -116,7 +127,8 @@ export default function Create()
             accept={".jpg, .png"}
         />
         
-        <button onClick={expHand}>bruh</button>
+        <button onClick={() => exportHandler(false)}>Download Model</button>
+        <button onClick={() => exportHandler()}>Share Model</button>
         
         </>
     );
