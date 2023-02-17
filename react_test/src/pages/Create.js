@@ -4,7 +4,7 @@ import { TextureLoader} from 'three';
 import { OrbitControls } from '@react-three/drei';
 import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter';
 
-import { getStorage,ref,uploadBytesResumable } from 'firebase/storage'
+import { getDownloadURL, getStorage,ref,uploadBytesResumable } from 'firebase/storage'
 import initStor from '../components/firebaseInit'
 
 const stor = getStorage(initStor)
@@ -52,6 +52,10 @@ export default function Create()
     
     const exportHandler = (upl=true) => {
         
+        /*
+            Function used to export a model and then either 
+            download directly to device or upload to firebase
+        */
         
         const exporter = new GLTFExporter()
         //const exporter = new OBJExporter()
@@ -68,7 +72,8 @@ export default function Create()
                     
                 if (upl)   
                 {
-                    const storRef = ref(stor,'modelMeta2.glb')
+                    const storRef = ref(stor,'modelURLTest.glb')
+                    
                     const metadata = 
                     {
                         contentType: 'model/glb',
@@ -78,9 +83,22 @@ export default function Create()
                         }
                     }
                     const upTask = uploadBytesResumable(storRef, glbBlob, metadata)
-                        
-                    upTask.on("state_changed", () => {})
-            }
+                    
+                    upTask.on(
+                        "state_changed", 
+                        (snapshot) => {
+
+                        },
+                         (error) => {
+                            console.log("Error with upload: ", error)
+                         },
+                         () => {
+                            getDownloadURL(upTask.snapshot.ref).then((downloadURL) => {
+                                console.log('File available at', downloadURL);
+                            })
+                         }
+                         )
+                }
 
                 else
                 {
@@ -93,7 +111,7 @@ export default function Create()
                     document.body.appendChild(link)
                     link.click()
                     document.body.removeChild(link)
-            }
+                }
                     
                 
             },
@@ -129,6 +147,7 @@ export default function Create()
         
         <button onClick={() => exportHandler(false)}>Download Model</button>
         <button onClick={() => exportHandler()}>Share Model</button>
+        
         
         </>
     );
