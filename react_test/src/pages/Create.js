@@ -26,8 +26,8 @@ export function Box(props)
                 ref={ref}
                 scale={props.scale}
             >
-                <boxGeometry attach = "geometry" args={[1,1,1]}/>
-                <meshStandardMaterial attach ="material" map={b} />
+                <boxGeometry attach = "geometry" args={[1,1,1,160,90]}/>
+                <meshStandardMaterial attach ="material" map={b} wireframe={props.wf} />
                 
             </mesh>
         )
@@ -35,7 +35,8 @@ export function Box(props)
 
 Box.defaultProps = {
     i: text,
-    scale: [16,9,.01]
+    scale: [16,9,.01],
+    wf: false
     
 }
 
@@ -64,7 +65,6 @@ export default function Create()
         */
         
         const exporter = new GLTFExporter()
-        //const exporter = new OBJExporter()
         exporter.parse(
             canvasRef.current,
             (gltf) => {
@@ -141,14 +141,16 @@ export default function Create()
                     <Box 
                     position = {[0,0,0]} 
                     i={text}
-                    scale={[16,9,.01]} 
+                    scale={[16,9,.01]}
+                    wf={true}
                     onDoubleClick={(e)=> {
                         var pos = e.intersections[0].point
-                        pos.z = pos.z + .2
+                        pos.z = pos.z + .25
                         setBoxes((boxes) => [...boxes,pos])
                         // console.log(boxes)
                         }
                     }/>
+
                     {boxes.map((position,index) => 
                         (
                         <Box key={index} position={position} scale={[.5,.5,.5]}/>
@@ -171,8 +173,13 @@ export default function Create()
         
         <button onClick={() => exportHandler(false)}>Download Model</button>
         <button onClick={() => exportHandler()}>Share Model</button>
-        
-        
+        <button onClick={() => setBoxes([])}>Clear Boxes</button>
+        <button onClick={() => {
+                var l = [...boxes]
+                l.splice(l.length-1,1)
+                setBoxes(l)
+            }
+        }>Undo Box</button>
         </>
     )
 }
