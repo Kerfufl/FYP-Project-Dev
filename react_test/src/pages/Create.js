@@ -1,8 +1,8 @@
-import React, {Suspense, useRef, useState} from 'react';
-import {Canvas, useLoader} from '@react-three/fiber';
-import { TextureLoader} from 'three';
-import { OrbitControls } from '@react-three/drei';
-import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter';
+import React, {Suspense, useRef, useState} from 'react'
+import {Canvas, useLoader} from '@react-three/fiber'
+import { TextureLoader} from 'three'
+import { OrbitControls } from '@react-three/drei'
+import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter'
 
 
 import { getDownloadURL, getStorage,ref,uploadBytesResumable } from 'firebase/storage'
@@ -13,7 +13,7 @@ const stor = getStorage(initStor)
 var text = require("../img/In the Court of the Stone Defender.png")
 export function Box(props)
     {
-        const ref = useRef();
+        const ref = useRef()
         const text = props.i
         const b =useLoader(TextureLoader,text)
         
@@ -24,22 +24,28 @@ export function Box(props)
             <mesh
                 {...props}
                 ref={ref}
+                scale={props.scale}
             >
-                <boxGeometry attach = "geometry" args={[16,9,.01]}/>
-                <meshStandardMaterial attach ="material"map={b} />
+                <boxGeometry attach = "geometry" args={[1,1,1]}/>
+                <meshStandardMaterial attach ="material" map={b} />
                 
             </mesh>
         )
     }
 
 Box.defaultProps = {
-    i: text
+    i: text,
+    scale: [16,9,.01]
+    
 }
 
 
 export default function Create() 
 {
     const [selImg, setSelImg] = useState(null)
+    const [boxes, setBoxes] = useState([])
+
+
     const imgHandle = (e) => {
         console.log()
         const b = URL.createObjectURL(e.target.files[0])
@@ -94,7 +100,7 @@ export default function Create()
                          },
                          () => {
                             getDownloadURL(upTask.snapshot.ref).then((downloadURL) => {
-                                console.log('File available at', downloadURL);
+                                console.log('File available at', downloadURL)
                             })
                          }
                          )
@@ -106,7 +112,7 @@ export default function Create()
                     const link = document.createElement('a')
                     link.href = URL.createObjectURL(glbBlob)
                     console.log(link.href)
-                    link.download = 'model.glb';
+                    link.download = 'model.glb'
 
                     document.body.appendChild(link)
                     link.click()
@@ -134,12 +140,20 @@ export default function Create()
                 <group ref={canvasRef}>
                     <Box 
                     position = {[0,0,0]} 
-                    i={text} 
+                    i={text}
+                    scale={[16,9,.01]} 
                     onDoubleClick={(e)=> {
-                        console.log(e.intersections[0].point)
-                        
+                        var pos = e.intersections[0].point
+                        pos.z = pos.z + .2
+                        setBoxes((boxes) => [...boxes,pos])
+                        // console.log(boxes)
                         }
                     }/>
+                    {boxes.map((position,index) => 
+                        (
+                        <Box key={index} position={position} scale={[.5,.5,.5]}/>
+                        )
+                    )}
                     
                 </group>
                 
@@ -160,5 +174,5 @@ export default function Create()
         
         
         </>
-    );
+    )
 }
