@@ -1,8 +1,9 @@
-import React, {useRef, useState} from 'react';
+import React, {Suspense, useRef, useState} from 'react';
 import {Canvas, useLoader} from '@react-three/fiber';
 import { TextureLoader} from 'three';
 import { OrbitControls } from '@react-three/drei';
 import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter';
+
 
 import { getDownloadURL, getStorage,ref,uploadBytesResumable } from 'firebase/storage'
 import initStor from '../components/firebaseInit'
@@ -48,7 +49,6 @@ export default function Create()
     }
 
     const canvasRef = useRef(null)
-
     
     const exportHandler = (upl=true) => {
         
@@ -132,8 +132,18 @@ export default function Create()
         <Canvas>
                 <ambientLight/>
                 <group ref={canvasRef}>
-                    <Box position = {[-1.2,0,-2]} i={text}/>
+                    <Box 
+                    position = {[0,0,0]} 
+                    i={text} 
+                    onDoubleClick={(e)=> {
+                        console.log(e.intersections[0].point)
+                        
+                        }
+                    }/>
+                    
                 </group>
+                
+                
                 <OrbitControls />
         </Canvas>
         
