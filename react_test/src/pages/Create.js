@@ -175,7 +175,7 @@ export default function Create()
         <button onClick={() => exportHandler()}>Share Model</button>
         <button onClick={() => setBoxes([])}>Clear Boxes</button>
         <button onClick={() => {
-                var l = [...boxes]
+                let l = [...boxes]
                 l.splice(l.length-1,1)
                 setBoxes(l)
             }
