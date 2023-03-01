@@ -3,22 +3,7 @@ import { useState, useEffect } from 'react';
 import '../CSS/style.css'
 
 export default function Home() 
-{
-    const [apiResponse, setApiResponse] = useState([])
-
-    useEffect(() => {
-        callAPI();
-    })
-
-    const callAPI = () => {
-        fetch("http://localhost:9000/dbTest")
-            .then(res => res.json())
-            .then((data) => {
-                console.log(data['first_name'])
-            })
-            
-            //.then(res => setApiResponse(res));
-    }
+{   
     return(
         <>
         <h1 style={{textAlign: 'center'}}>Welcome to Upcast</h1>
@@ -29,7 +14,6 @@ export default function Home()
 			<div class="choice"><Link to='/Browse' class= 'linkbar'><h1>Browse</h1></Link></div>
 		</div>
 		
-        
         </>
     );
 }

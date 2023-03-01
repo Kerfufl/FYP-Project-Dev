@@ -17,17 +17,15 @@ router.get('/', function(req, res, next) {
     b.then(conn => {
         conn.query("SELECT * FROM fyp_users").then(
             (rows => {
-                //console.log(rows[0]['first_name']);
-                //res.send(rows[0]);
-                res.json({
-                    first_name: rows[0]['first_name'],
-                    last_name: rows[0]['last_name']
-                }
-                )
+                //console.log(rows);
+                res.send(rows);
+                
             })
         )
     })
 
 });
   
+
+
 module.exports = router;
