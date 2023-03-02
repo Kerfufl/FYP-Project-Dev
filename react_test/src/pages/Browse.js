@@ -19,6 +19,7 @@ export default function Share()
     useEffect(() => {
         callAPI();
     },[])
+
     const addResp = (dat) => {
         setApiResponse(prevState => [...prevState,dat])
     }
@@ -36,9 +37,13 @@ export default function Share()
                     //console.log(element)
                     addResp(element)
                 });
+            }).catch(e => {
+                console.log("Oops, ",e," happened")
             })
             
     }
+
+    
     return(
         <>
         <div style={{display:'flex',justifyContent:'center', alignItems:'center', marginBottom: '5px'}}>

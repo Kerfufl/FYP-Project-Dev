@@ -13,7 +13,6 @@ export default function Home()
 			<div class="choice"><Link to='/Create' class = 'linkbar'><h1>Create</h1></Link></div>
 			<div class="choice"><Link to='/Browse' class= 'linkbar'><h1>Browse</h1></Link></div>
 		</div>
-		
         </>
     );
 }

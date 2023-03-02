@@ -2,6 +2,7 @@ import React, {Suspense, useRef, useState} from 'react'
 import {Canvas, useLoader} from '@react-three/fiber'
 import { TextureLoader} from 'three'
 import { OrbitControls } from '@react-three/drei'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter'
 
 
@@ -10,7 +11,11 @@ import initStor from '../components/firebaseInit'
 
 const stor = getStorage(initStor)
 
+
 var text = require("../img/In the Court of the Stone Defender.png")
+const impMod = "https://firebasestorage.googleapis.com/v0/b/final-year-project-stora-c4785.appspot.com/o/modelURLTest.glb?alt=media&token=c60e98bb-38e1-4b2f-9a91-5a00fae63b35"
+
+
 export function Box(props)
     {
         const ref = useRef()
@@ -56,6 +61,7 @@ export default function Create()
     }
 
     const canvasRef = useRef(null)
+    const imp = useLoader(GLTFLoader,impMod)
     
     const exportHandler = (upl=true) => {
         
@@ -151,6 +157,7 @@ export default function Create()
                         }
                     }/>
 
+                    
                     {boxes.map((position,index) => 
                         (
                         <Box key={index} position={position} scale={[.5,.5,.5]}/>
@@ -158,7 +165,9 @@ export default function Create()
                     )}
                     
                 </group>
-                
+                <Suspense fallback={null}>
+                        <primitive object={imp.scene} position={[0,0,0]}></primitive>
+                </Suspense>
                 
                 <OrbitControls />
         </Canvas>
