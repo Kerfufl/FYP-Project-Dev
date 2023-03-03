@@ -13,6 +13,18 @@ export default function Bar() {
 			<div class = "home-div">
 				<Link to="/Browse" class = "linkbar">Browse</Link>
 			</div>
+
+			<div class = "log-div" >
+				<form onSubmit={(e) => e.preventDefault()}>
+					<label>
+						Bruh <input type={"text"} name={"username"}/>
+					</label> 
+					<label>
+						Bruh <input type={"text"} name={"username"}/>
+					</label> 
+					<input type={'submit'} value={'Login'} style={{marginBottom:'auto'}}/>
+				</form>
+			</div>
 		</div>
 		
 

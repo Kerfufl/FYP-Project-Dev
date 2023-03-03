@@ -1,6 +1,7 @@
 .flex-container 
 {
     display: flex;
+	border: 1px solid black;
 }
 .flextest 
 {
@@ -17,13 +18,23 @@
 .home-div 
 {
 	margin: 10px;
-	padding-left: 10px; 
+	margin-left: 1%; 
 	padding-right: 30px;
 	font-size: 30px;
 	border-right: 5px solid black;
 	font-family: Arial, Helvetica, sans-serif;
 }
 
+.log-div 
+{
+	margin: 10px;
+	border: 1px solid black;
+	margin-left:auto;
+	margin-top: auto;
+	margin-bottom: auto;
+	font-size: 16px;
+	font-family: Arial, Helvetica, sans-serif;
+}
 .linkbar
 {
     color: inherit;
