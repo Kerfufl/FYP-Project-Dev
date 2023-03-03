@@ -15,7 +15,7 @@ router.get('/', function(req, res, next) {
     // res.send('bruh');
     
     b.then(conn => {
-        conn.query("SELECT * FROM fyp_users").then(
+        conn.query("SELECT * FROM fyp_models").then(
             (rows => {
                 //console.log(rows);
                 res.send(rows);

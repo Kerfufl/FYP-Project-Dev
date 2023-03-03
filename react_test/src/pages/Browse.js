@@ -1,6 +1,8 @@
-import React, {useState, useEffect} from 'react';
-import {Canvas} from '@react-three/fiber'
+import React, {useState, useEffect, Suspense} from 'react';
+import {Canvas, useLoader} from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+
 import '../index.css';
 import {Box} from './Create';
 //import Box from '../Extra Functions/rend';
@@ -26,6 +28,11 @@ export default function Share()
     const clearResp = () => {
         setApiResponse([])
     }
+
+    function Comp({e}) {
+        const mod = useLoader(GLTFLoader,e)
+        return <primitive object={mod.scene}/>
+    }
     
     const callAPI = () => {
         fetch("http://localhost:9000/dbTest")
@@ -34,7 +41,7 @@ export default function Share()
                 //console.log(data)
                 clearResp()
                 data.forEach(element => {
-                    //console.log(element)
+                    element["date_created"] = element["date_created"].slice(0,10)
                     addResp(element)
                 });
             }).catch(e => {
@@ -54,22 +61,29 @@ export default function Share()
         </div>
         <div class="flex-container" id="share" >
 			
-            {apiResponse.map((ap, index) => (
-            <div class="choice"  id="div1" key={index}>
-				<h1>Example {index+1}
+            {apiResponse.map((ap, index) => {
                 
-                <button type='button' onClick={clearResp}>Remove</button></h1>
-                
-				<h3>By: {ap["first_name"]} {ap["last_name"]}</h3>
-				<h3>Date: 08.12.2022</h3><hr/>
-                <Canvas style={{width:300,height:260, margin:'auto'}}>
-                    <ambientLight/>
-                    
-                    <Box position = {[0,0,-6]} i ={text} />
-                    <OrbitControls />
-                </Canvas>
-			</div>
-            ))}
+                return(
+                    <div class="choice"  id="div1" key={index}>
+                        <h1>Example {index+1}
+                        
+                        <button type='button' onClick={clearResp}>Remove</button></h1>
+                        
+                        <h3>By: {ap["first_name"]} {ap["last_name"]}</h3>
+                        <h3>Date: {ap["date_created"]}</h3><hr/>
+                        
+                        <Canvas style={{width:300,height:260, margin:'auto'}}>
+                            <ambientLight/>
+                            
+                            {/* <Box position = {[0,0,-6]} i ={text} /> */}
+                            <Suspense fallback={null}>
+                                <Comp e={ap["model_link"]}/>
+                            </Suspense>
+                            <OrbitControls />
+                        </Canvas>
+                    </div>
+                )
+            })}
 			
 		</div>
         </>

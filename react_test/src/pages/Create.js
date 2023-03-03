@@ -165,9 +165,9 @@ export default function Create()
                     )}
                     
                 </group>
-                <Suspense fallback={null}>
+                {/* <Suspense fallback={null}>
                         <primitive object={imp.scene} position={[0,0,0]}></primitive>
-                </Suspense>
+                </Suspense> */}
                 
                 <OrbitControls />
         </Canvas>
