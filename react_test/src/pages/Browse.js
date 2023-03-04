@@ -2,6 +2,7 @@ import React, {useState, useEffect, Suspense} from 'react';
 import {Canvas, useLoader} from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+import axios from 'axios'
 
 import '../index.css';
 import {Box} from './Create';
@@ -35,8 +36,9 @@ export default function Share()
     }
     
     const callAPI = () => {
-        fetch("http://localhost:9000/dbTest")
-            .then(res => res.json())
+        //fetch("http://localhost:9000/dbTest")
+        axios.get("http://localhost:9000/dbTest")
+            .then(res => res.data)
             .then((data) => {
                 //console.log(data)
                 clearResp()
