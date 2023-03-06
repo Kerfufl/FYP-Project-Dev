@@ -3,7 +3,7 @@
 Implementation of final year project for 4th year of Technological University Dublin Computer Science Infrastructure.
 
 Uses:
-⋅⋅⋅ ReactJS
-⋅⋅⋅ ExpressJS
-⋅⋅⋅ ThreeJS
-⋅⋅⋅ MariaDB
+- ReactJS
+- ExpressJS
+- ThreeJS
+- MariaDB
