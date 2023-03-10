@@ -1,7 +1,7 @@
 import React, {Suspense, useRef, useState} from 'react'
 import {Canvas, useLoader} from '@react-three/fiber'
 import { TextureLoader} from 'three'
-import { OrbitControls } from '@react-three/drei'
+import { Center, OrbitControls } from '@react-three/drei'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter'
 
@@ -14,6 +14,7 @@ const stor = getStorage(initStor)
 
 var text = require("../img/In the Court of the Stone Defender.png")
 const impMod = "https://firebasestorage.googleapis.com/v0/b/final-year-project-stora-c4785.appspot.com/o/modelURLTest.glb?alt=media&token=c60e98bb-38e1-4b2f-9a91-5a00fae63b35"
+
 
 
 export function Box(props)
@@ -51,6 +52,12 @@ export default function Create()
     const [selImg, setSelImg] = useState(null)
     const [boxes, setBoxes] = useState([])
 
+    const [fileName,setFileName] = useState('model')
+
+    const fileChange = e => {
+        //console.log(e.target.value)
+        setFileName(e.target.value)
+    }
 
     const imgHandle = (e) => {
         console.log()
@@ -62,6 +69,7 @@ export default function Create()
 
     const canvasRef = useRef(null)
     const imp = useLoader(GLTFLoader,impMod)
+    
     
     const exportHandler = (upl=true) => {
         
@@ -84,7 +92,7 @@ export default function Create()
                     
                 if (upl)   
                 {
-                    const storRef = ref(stor,'modelURLTest.glb')
+                    const storRef = ref(stor,`bruh/${fileName}.glb`)
                     
                     const metadata = 
                     {
@@ -118,7 +126,7 @@ export default function Create()
                     const link = document.createElement('a')
                     link.href = URL.createObjectURL(glbBlob)
                     console.log(link.href)
-                    link.download = 'model.glb'
+                    link.download = `${fileName}.glb`
 
                     document.body.appendChild(link)
                     link.click()
@@ -139,16 +147,16 @@ export default function Create()
         <>
         
         
-        <div style = {{height:'90%',border:'2px solid black'}}>
+        <div style = {{height:'50%',width:'50%',margin:'auto',border:'2px solid black'}}>
             
         <Canvas>
                 <ambientLight/>
                 <group ref={canvasRef}>
                     <Box 
-                    position = {[0,0,0]} 
+                    position = {[0,0,-2]}
                     i={text}
                     scale={[16,9,.01]}
-                    wf={true}
+                    wf={false}
                     onDoubleClick={(e)=> {
                         var pos = e.intersections[0].point
                         pos.z = pos.z + .25
@@ -171,17 +179,11 @@ export default function Create()
                 
                 <OrbitControls />
         </Canvas>
-        
-        </div>
-        
         <input 
             type={'file'} 
             onChange= {imgHandle}
             accept={".jpg, .png"}
         />
-        
-        <button onClick={() => exportHandler(false)}>Download Model</button>
-        <button onClick={() => exportHandler()}>Share Model</button>
         <button onClick={() => setBoxes([])}>Clear Boxes</button>
         <button onClick={() => {
                 let l = [...boxes]
@@ -189,6 +191,28 @@ export default function Create()
                 setBoxes(l)
             }
         }>Undo Box</button>
+        </div>
+        <br/><hr/>
+        <div class='flextest' style={{ border:'2px solid black', height:'40%'}}>
+        
+        
+        <div class='choice' style={{ margin:'auto', justifyContent:'Center'}}>
+            <label>
+				Bruh 
+                <input type={"text"} name={"username"} onChange={fileChange}/>
+                <button onClick={() => exportHandler(false)} >Download Model</button>
+			</label> 
+            
+        </div>
+        <div class="choice" style={{ margin:'auto', justifyContent:'Center'}}>
+        <label>
+		    Bruh <input type={"text"} name={"username"}/>
+            <button onClick={() => exportHandler(true)} >Upload Model</button>
+		</label> 
+        </div>
+        
+
+        </div>
         </>
     )
 }

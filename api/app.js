@@ -4,12 +4,11 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require("cors");
-var bodyParse = require('body-parser')
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var testAPIrouter = require("./routes/testAPI");
-var db_test = require("./routes/db_test");
+var db_test = require("./routes/db_select");
 var app = express();
 
 // view engine setup
@@ -22,8 +21,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-//app.use(bodyParse.json())
-//app.use(bodyParse.urlencoded({ extended: false}))
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

@@ -34,11 +34,11 @@ export default function Share()
     }
 
     const handleTypeChange = e => {
-        console.log(e.target.value)
+        //console.log(e.target.value)
         setSearchType(e.target.value)
     }
     const handleTermChange = e => {
-        console.log(e.target.value)
+        //console.log(e.target.value)
         setSearchTerm(e.target.value)
     }
 
