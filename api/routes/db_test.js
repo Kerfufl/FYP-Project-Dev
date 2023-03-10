@@ -30,7 +30,7 @@ router.post('/', function(req, res, next) {
     // res.send('bruh');
     
     b.then(conn => {
-        conn.query(`SELECT * FROM fyp_models where first_name = '${String(req.body.name)}'`).then(
+        conn.query(`SELECT * FROM fyp_models where ${String(req.body.stype)} = '${String(req.body.term)}'`).then(
             (rows => {
                 //console.log(rows);
                 if (rows.length == 0) console.log("oops");

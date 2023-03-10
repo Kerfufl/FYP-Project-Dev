@@ -17,11 +17,13 @@ export default function Share()
 
     
     const [apiResponse, setApiResponse] = useState([])
-
+    const [searchTerm, setSearchTerm] = useState('')
+    const [searchType, setSearchType] = useState('first_name')
+    
     
     useEffect(() => {
-        //callAPI();
-        postSearch();
+        callAPI();
+        //postSearch();
     },[])
 
     const addResp = (dat) => {
@@ -31,13 +33,21 @@ export default function Share()
         setApiResponse([])
     }
 
+    const handleTypeChange = e => {
+        console.log(e.target.value)
+        setSearchType(e.target.value)
+    }
+    const handleTermChange = e => {
+        console.log(e.target.value)
+        setSearchTerm(e.target.value)
+    }
+
     function Comp({e}) {
         const mod = useLoader(GLTFLoader,e)
         return <primitive object={mod.scene}/>
     }
     
     const callAPI = () => {
-        //fetch("http://localhost:9000/dbTest")
         axios.get("http://localhost:9000/dbTest")
             .then(res => res.data)
             .then((data) => {
@@ -54,7 +64,7 @@ export default function Share()
     }
 
     const postSearch = () => {
-    axios.post("http://localhost:9000/dbTest", {name:'Joh'})
+        axios.post("http://localhost:9000/dbTest", {term: searchTerm, stype: searchType})
             .then(res => res.data)
             .then((data) => {
                 //console.log(data)
@@ -72,9 +82,13 @@ export default function Share()
     return(
         <>
         <div style={{display:'flex',justifyContent:'center', alignItems:'center', marginBottom: '5px'}}>
-            <input type={"search"} style={{width:'60%',height:'20px'}}/>
+            <select name="search-type" onChange={handleTypeChange}>
+                <option value="first_name">Name</option>
+                <option value="last_name">Last Name</option>
+            </select>
+            <input type={"search"} onChange={handleTermChange} style={{width:'60%',height:'20px'}}/>
             
-            <input type={"button"} value="Search models" onClick={callAPI}/>
+            <input type={"button"} value="Search models" onClick={postSearch}/>
             {/* <h1 style={{alignSelf:'center'}}>Browse test</h1> */}
         </div>
         <div class="flex-container" id="share" >
