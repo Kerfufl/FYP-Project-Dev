@@ -20,7 +20,8 @@ export default function Share()
 
     
     useEffect(() => {
-        callAPI();
+        //callAPI();
+        postSearch();
     },[])
 
     const addResp = (dat) => {
@@ -51,6 +52,21 @@ export default function Share()
             })
             
     }
+
+    const postSearch = () => {
+    axios.post("http://localhost:9000/dbTest", {name:'Joh'})
+            .then(res => res.data)
+            .then((data) => {
+                //console.log(data)
+                clearResp()
+                data.forEach(element => {
+                    element["date_created"] = element["date_created"].slice(0,10)
+                    addResp(element)
+                });
+            }).catch(e => {
+                console.log("Oops, ",e," happened")
+            })
+        }
 
     
     return(
