@@ -1,4 +1,4 @@
-import React, {Suspense, useRef, useState} from 'react'
+import React, {useRef, useState} from 'react'
 import {Canvas, useLoader} from '@react-three/fiber'
 import { TextureLoader} from 'three'
 import { Center, OrbitControls } from '@react-three/drei'
@@ -53,16 +53,19 @@ export default function Create()
     const [boxes, setBoxes] = useState([])
 
     const [fileName,setFileName] = useState('model')
+    const [fileURL,setFileURL] = useState(null)
 
     const fileChange = e => {
         //console.log(e.target.value)
         setFileName(e.target.value)
     }
-
+    const urlChange = (p) => {
+        //console.log(e.target.value)
+        setFileURL(p)
+    }
     const imgHandle = (e) => {
-        console.log()
         const b = URL.createObjectURL(e.target.files[0])
-        console.log(b)
+        //console.log(b)
         setSelImg(b)
         text=b
     }
@@ -96,11 +99,7 @@ export default function Create()
                     
                     const metadata = 
                     {
-                        contentType: 'model/glb',
-                        customMetaData: {
-                            'user': 'Eoin',
-                            'shape' : 'flat'
-                        }
+                        contentType: 'model/glb'
                     }
                     const upTask = uploadBytesResumable(storRef, glbBlob, metadata)
                     
@@ -115,6 +114,7 @@ export default function Create()
                          () => {
                             getDownloadURL(upTask.snapshot.ref).then((downloadURL) => {
                                 console.log('File available at', downloadURL)
+                                urlChange(downloadURL)
                             })
                          }
                          )
@@ -146,9 +146,9 @@ export default function Create()
     return(
         <>
         
-        
+        { selImg ? 
         <div style = {{height:'50%',width:'50%',margin:'auto',border:'2px solid black'}}>
-            
+        
         <Canvas>
                 <ambientLight/>
                 <group ref={canvasRef}>
@@ -173,17 +173,22 @@ export default function Create()
                     )}
                     
                 </group>
-                {/* <Suspense fallback={null}>
-                        <primitive object={imp.scene} position={[0,0,0]}></primitive>
-                </Suspense> */}
                 
                 <OrbitControls />
         </Canvas>
+        
+        
+        
+        </div>
+        : <></>
+    }
+        <div class="flextest" style={{margin:'auto', width:'50%'}}>
         <input 
             type={'file'} 
             onChange= {imgHandle}
             accept={".jpg, .png"}
         />
+        { selImg ? <>
         <button onClick={() => setBoxes([])}>Clear Boxes</button>
         <button onClick={() => {
                 let l = [...boxes]
@@ -191,28 +196,36 @@ export default function Create()
                 setBoxes(l)
             }
         }>Undo Box</button>
+        </>
+        : <>vr</>
+        }
         </div>
-        <br/><hr/>
-        <div class='flextest' style={{ border:'2px solid black', height:'40%'}}>
         
-        
-        <div class='choice' style={{ margin:'auto', justifyContent:'Center'}}>
-            <label>
-				Bruh 
-                <input type={"text"} name={"username"} onChange={fileChange}/>
-                <button onClick={() => exportHandler(false)} >Download Model</button>
-			</label> 
+            {selImg ? <>
+            <br/><hr/>
+            <div class='flextest' style={{ border:'2px solid black', height:'40%'}}>
             
-        </div>
-        <div class="choice" style={{ margin:'auto', justifyContent:'Center'}}>
-        <label>
-		    Bruh <input type={"text"} name={"username"}/>
-            <button onClick={() => exportHandler(true)} >Upload Model</button>
-		</label> 
-        </div>
-        
-
-        </div>
+            
+            <div class='choice' style={{ margin:'auto', justifyContent:'Center'}}>
+                <label>
+                    Bruh 
+                    <input type={"text"} name={"username"} onChange={fileChange}/>
+                    <button onClick={() => exportHandler(false)} >Download Model</button>
+                </label> 
+                
+            </div>
+            <div class="choice" style={{ margin:'auto', justifyContent:'Center'}}>
+            <label>
+                Bruh <input type={"text"} name={"username"}/>
+                <button onClick={() => exportHandler(true)} >Upload Model</button>
+            </label> 
+            </div>
+            
+            
+            </div>
+            </> 
+            : <></>
+        }
         </>
     )
 }
