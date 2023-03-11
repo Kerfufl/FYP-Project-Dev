@@ -1,6 +1,29 @@
 import '../CSS/style.css'
 import {Outlet,Link} from "react-router-dom"
+import axios from 'axios'
+import {useState} from 'react'
+
 export default function Bar() {
+
+	const [username, setUsername] = useState(null)
+	const [password, setPassword] = useState(null)
+
+	const handleUser = e => {
+		setUsername(e.target.value)
+	}
+
+	const handlePass = e => {
+		setPassword(e.target.value)
+	}
+
+	const regi = () => {
+		axios.post('http://localhost:9000/users',{user: username, pass: password})
+		.then(res => res.data)
+		.then((data)=>
+			{
+				console.log(data)
+			})
+	}
     return(
         <>
         <div class="flex-container">
@@ -15,12 +38,16 @@ export default function Bar() {
 			</div>
 
 			<div class = "log-div" >
-				<form onSubmit={(e) => e.preventDefault()}>
+				<form onSubmit={(e) => 
+					{
+						e.preventDefault()
+						regi()
+					}}>
 					<label>
-						Bruh <input type={"text"} name={"username"}/>
+						User <input type={"text"} name={"username"} onChange={handleUser}/>
 					</label> 
 					<label>
-						Bruh <input type={"text"} name={"username"}/>
+						Password <input type={"password"} name={"username"} onChange={handlePass}/>
 					</label> 
 					<input type={'submit'} value={'Login'} style={{marginBottom:'auto'}}/>
 				</form>

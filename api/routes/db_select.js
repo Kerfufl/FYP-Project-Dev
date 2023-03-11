@@ -1,20 +1,12 @@
 var express = require('express');
-var mdb = require("mariadb");
+var mdb = require('../components/mdbconfig')
 var router = express.Router();
 
-b = mdb.createConnection(
-    {
-        user:"root",
-        host: "localhost",
-        database: "fyp_db"
-    }
-
-)
 
 router.get('/', function(req, res, next) {
     // res.send('bruh');
     
-    b.then(conn => {
+    mdb.then(conn => {
         conn.query("SELECT * FROM fyp_models").then(
             (rows => {
                 //console.log(rows);
