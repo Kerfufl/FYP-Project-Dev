@@ -38,19 +38,14 @@ export default function Bar() {
 			</div>
 
 			<div class = "log-div" >
-				<form onSubmit={(e) => 
-					{
-						e.preventDefault()
-						regi()
-					}}>
-					<label>
-						User <input type={"text"} name={"username"} onChange={handleUser}/>
-					</label> 
-					<label>
-						Password <input type={"password"} name={"username"} onChange={handlePass}/>
-					</label> 
-					<input type={'submit'} value={'Login'} style={{marginBottom:'auto'}}/>
-				</form>
+				<label>
+					User <input type={"text"} name={"username"} onChange={handleUser}/>
+				</label> 
+				<label>
+					Password <input type={"password"} name={"username"} onChange={handlePass}/>
+				</label> 
+				<input type={'button'} value={'Register'} onClick={regi} style={{marginBottom:'auto'}}/>
+				<input type={'button'} value={'Login'} style={{marginBottom:'auto'}}/>				
 			</div>
 		</div>
 		
