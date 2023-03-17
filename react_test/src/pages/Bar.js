@@ -1,12 +1,14 @@
 import '../CSS/style.css'
 import {Outlet,Link} from "react-router-dom"
 import axios from 'axios'
+import cookies from 'universal-cookie';
 import {useState} from 'react'
 
 export default function Bar() {
 
 	const [username, setUsername] = useState(null)
 	const [password, setPassword] = useState(null)
+	const cki = new cookies;
 
 	const handleUser = e => {
 		setUsername(e.target.value)
@@ -30,7 +32,8 @@ export default function Bar() {
 		.then(res => res.data)
 		.then((data)=>
 			{
-				console.log(data)
+				console.log(data);
+				cki.set("Token", data.token, {path: "/", sameSite:"None"});
 			})
 	}
     return(
