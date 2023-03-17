@@ -24,6 +24,15 @@ export default function Bar() {
 				console.log(data)
 			})
 	}
+
+	const logi = () => {
+		axios.post('http://localhost:9000/logi',{user: username, pass: password})
+		.then(res => res.data)
+		.then((data)=>
+			{
+				console.log(data)
+			})
+	}
     return(
         <>
         <div class="flex-container">
@@ -45,7 +54,7 @@ export default function Bar() {
 					Password <input type={"password"} name={"username"} onChange={handlePass}/>
 				</label> 
 				<input type={'button'} value={'Register'} onClick={regi} style={{marginBottom:'auto'}}/>
-				<input type={'button'} value={'Login'} style={{marginBottom:'auto'}}/>				
+				<input type={'button'} value={'Login'} onClick={logi} style={{marginBottom:'auto'}}/>				
 			</div>
 		</div>
 		
