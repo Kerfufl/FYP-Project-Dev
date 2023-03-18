@@ -8,18 +8,21 @@ export default function Bar() {
 
 	const [username, setUsername] = useState(null)
 	const [password, setPassword] = useState(null)
-	const [login, setLogin] = useState(null)
+	const [login, setLogin] = useState(false)
+	const [useName, setUseName] = useState('')
 	const cki = new cookies();
 	
-	// useEffect(() => {
-    //     if (cki.get("Token"))
-    //     {
-    //         //console.log(cki.get("Token").uname)
-    //         setLogin(true)
-    //     } else {
-    //         setLogin("false")
-    //     }
-    // },[])
+	useEffect(() => {
+        if (cki.get("Token"))
+        {
+            console.log(cki.get("Token").uname)
+            setLogin(true)
+			setUseName(cki.get("Token").uname)
+			//console.log(useName)
+        } else {
+            setLogin(false)
+        }
+    },[useName])
 	const handleUser = e => {
 		setUsername(e.target.value)
 	}
@@ -43,15 +46,18 @@ export default function Bar() {
 		.then((data)=>
 			{
 				//console.log(data);
-				cki.set("Token", {tok: data.token, uname:username}, {path: "/", sameSite:"None", maxAge: 3600})
+				cki.set("Token", {tok: data.token, uname:username}, {path: "/", sameSite:"None", maxAge: 3600, Secure: true})
 				setLogin(cki.get("Token"))
-				ckTest()
+				setUseName(data.uname)
+				//ckTest()
+				//window.location.reload("false");
 			})
 	}
 
 	const unlog = () => {
 		cki.remove("Token")
 		setLogin(null)
+		//window.location.reload("false");
 	}
 
 	const ckTest = () => {
@@ -89,7 +95,8 @@ export default function Bar() {
 			</div> : 
 			<div class="log-div">
 				<label>
-					<input type={'button'} value={'Logout'} onClick={unlog} style={{marginBottom:'auto'}}/> Hello, {cki.get("Token").uname}	
+					<input type={'button'} value={'Logout'} onClick={unlog} style={{marginBottom:'auto'}}/> Hello, {useName}
+	
 				</label>
 			</div>}
 		</div>

@@ -12,14 +12,14 @@ export default function Home()
         if (cki.get("Token"))
         {
             console.log(cki.get("Token").uname)
-            setUser(","+cki.get('Token').uname)
+            setUser(cki.get('Token').uname)
         } else {
-            setUser(",User")
+            setUser("User")
         }
-    },[])
+    })
     return(
         <>
-        <h1 style={{textAlign: 'center'}}>Welcome to Upcast{user}</h1>
+        <h1 style={{textAlign: 'center'}}>Welcome to Upcast, {user}</h1>
 		<h1 style={{textAlign: 'center'}}>Which service would you like to access?</h1>
 		<div class="flextest" style={{border:'2px black solid', height:'70%'}}>
 			<div class="choice"><Link to='/Create' class = 'linkbar'><h1>Create</h1></Link></div>
