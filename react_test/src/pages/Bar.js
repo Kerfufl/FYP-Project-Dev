@@ -15,10 +15,8 @@ export default function Bar() {
 	useEffect(() => {
         if (cki.get("Token"))
         {
-            console.log(cki.get("Token").uname)
             setLogin(true)
 			setUseName(cki.get("Token").uname)
-			//console.log(useName)
         } else {
             setLogin(false)
         }
@@ -95,7 +93,7 @@ export default function Bar() {
 			</div> : 
 			<div class="log-div">
 				<label>
-					<input type={'button'} value={'Logout'} onClick={unlog} style={{marginBottom:'auto'}}/> Hello, {useName}
+					Hello, {useName} <input type={'button'} value={'Logout'} onClick={unlog} style={{marginBottom:'auto'}}/>
 	
 				</label>
 			</div>}
