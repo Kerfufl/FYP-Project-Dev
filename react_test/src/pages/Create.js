@@ -173,18 +173,18 @@ export default function Create()
         let mes = meshRef.current.geometry
         let geo = mes.attributes.position
 
-        // console.log(`${geo.array[face.a]}, ${geo.array[face.b]}, ${geo.array[face.a]}`)
+        //console.log(`${geo.array[face.a]}, ${geo.array[face.b]}, ${geo.array[face.a]}`)
 
-        // let vA = THREE.Vector3().fromArray(pos, face.a * 3)
-        // let vb = THREE.Vector3().fromArray(pos, face.b * 3)
-        // let vc = THREE.Vector3().fromArray(pos, face.c * 3)
-        console.log(mes)
+        //geo.setXYZ(face.a,0,0,11)
+        
+        //console.log(geo)
 
+        //mes.attributes.needsUpdat = true;
         //console.log(`${geo.array[face.a]}, ${geo.array[face.b]}, ${geo.array[face.a]}`)
 
         //mes.attributes.needsUpdate = true;
-        //pos.z = pos.z + .25
-        //setBoxes((boxes) => [...boxes,pos])
+        pos.z = pos.z + .25
+        setBoxes((boxes) => [...boxes,pos])
         // console.log(boxes)
     }
     return(
