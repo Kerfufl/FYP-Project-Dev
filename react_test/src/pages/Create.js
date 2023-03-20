@@ -1,7 +1,7 @@
-import React, {useRef, useState} from 'react'
-import {Canvas, useLoader} from '@react-three/fiber'
+import React, {useRef, useState, forwardRef} from 'react'
+import {Canvas, useLoader, useThree} from '@react-three/fiber'
 import { TextureLoader} from 'three'
-import { Center, OrbitControls } from '@react-three/drei'
+import { OrbitControls } from '@react-three/drei'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter'
 
@@ -18,26 +18,48 @@ const impMod = "https://firebasestorage.googleapis.com/v0/b/final-year-project-s
 
 
 export function Box(props)
-    {
-        const ref = useRef()
-        const text = props.i
-        const b =useLoader(TextureLoader,text)
-        
-        
-        //useFrame((state,delta) => (ref.current.rotation.x += delta))
+{
+   const bref = useRef(null)
+   const text = props.i
+   const b =useLoader(TextureLoader,text)
+   
+   
+   //useFrame((state,delta) => (ref.current.rotation.x += delta))
+   return (
+       <mesh
+           {...props}
+           ref={bref}
+           scale={props.scale}
+       >
+           <boxGeometry attach = "geometry" args={[1,1,1,16,9]}/>
+           <meshStandardMaterial attach ="material" map={b} wireframe={props.wf} />
+           
+       </mesh>
+   )
+}
 
-        return (
-            <mesh
-                {...props}
-                ref={ref}
-                scale={props.scale}
-            >
-                <boxGeometry attach = "geometry" args={[1,1,1,160,90]}/>
-                <meshStandardMaterial attach ="material" map={b} wireframe={props.wf} />
-                
-            </mesh>
-        )
-    }
+const BoxRef = forwardRef(function BoxTest(props,ref) 
+{
+    const text = props.i
+    const b =useLoader(TextureLoader,text)
+    const THREE = useThree()
+    
+    //useFrame((state,delta) => (ref.current.rotation.x += delta))
+    return (
+        <mesh
+            {...props}
+            ref={ref}
+            scale={props.scale}
+        >
+            <boxGeometry attach = "geometry" args={[1,1,1]}/>
+            <meshStandardMaterial attach ="material" map={b} wireframe={props.wf} />
+            
+        </mesh>
+    )
+ }
+)
+
+
 
 Box.defaultProps = {
     i: text,
@@ -71,6 +93,7 @@ export default function Create()
     }
 
     const canvasRef = useRef(null)
+    const meshRef = useRef();
     const imp = useLoader(GLTFLoader,impMod)
     
     
@@ -143,6 +166,27 @@ export default function Create()
             )
         
     }
+
+    const dCLickHandle = (e) => {
+        let pos = e.intersections[0].point
+        let face = e.intersections[0].face;
+        let mes = meshRef.current.geometry
+        let geo = mes.attributes.position
+
+        // console.log(`${geo.array[face.a]}, ${geo.array[face.b]}, ${geo.array[face.a]}`)
+
+        // let vA = THREE.Vector3().fromArray(pos, face.a * 3)
+        // let vb = THREE.Vector3().fromArray(pos, face.b * 3)
+        // let vc = THREE.Vector3().fromArray(pos, face.c * 3)
+        console.log(mes)
+
+        //console.log(`${geo.array[face.a]}, ${geo.array[face.b]}, ${geo.array[face.a]}`)
+
+        //mes.attributes.needsUpdate = true;
+        //pos.z = pos.z + .25
+        //setBoxes((boxes) => [...boxes,pos])
+        // console.log(boxes)
+    }
     return(
         <>
         
@@ -152,19 +196,14 @@ export default function Create()
         <Canvas>
                 <ambientLight/>
                 <group ref={canvasRef}>
-                    <Box 
+                    <BoxRef
+                    ref={meshRef} 
                     position = {[0,0,-2]}
                     i={text}
                     scale={[16,9,.01]}
                     wf={false}
-                    onDoubleClick={(e)=> {
-                        var pos = e.intersections[0].point
-                        pos.z = pos.z + .25
-                        setBoxes((boxes) => [...boxes,pos])
-                        // console.log(boxes)
-                        }
-                    }/>
-
+                    onDoubleClick={dCLickHandle}
+                    />
                     
                     {boxes.map((position,index) => 
                         (
