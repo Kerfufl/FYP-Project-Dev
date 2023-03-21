@@ -174,15 +174,13 @@ export default function Create()
         let geo = mes.attributes.position
 
         //console.log(`${geo.array[face.a]}, ${geo.array[face.b]}, ${geo.array[face.a]}`)
-
         //geo.setXYZ(face.a,0,0,11)
-        
         //console.log(geo)
-
         //mes.attributes.needsUpdat = true;
         //console.log(`${geo.array[face.a]}, ${geo.array[face.b]}, ${geo.array[face.a]}`)
-
         //mes.attributes.needsUpdate = true;
+
+        //Back up box placing functionality, in case point extrusion falls through
         pos.z = pos.z + .25
         setBoxes((boxes) => [...boxes,pos])
         // console.log(boxes)
