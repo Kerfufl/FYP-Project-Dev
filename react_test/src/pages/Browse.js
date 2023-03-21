@@ -1,71 +1,121 @@
-import React, {useState} from 'react';
-import {Canvas} from '@react-three/fiber'
+import React, {useState, useEffect, Suspense} from 'react';
+import {Canvas, useLoader} from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+import axios from 'axios'
+
 import '../index.css';
 import {Box} from './Create';
 //import Box from '../Extra Functions/rend';
 
 export default function Share() 
 {
-    // function Box(props)
-    // {
-    //     const ref = useRef();
-    //     const text = require("../img/In the Court of the Stone Defender.png")
-    //     const b =useLoader(TextureLoader,text)
-        
-    //     //useFrame((state,delta) => (ref.current.rotation.x += delta))
-        
-
-    //     return (
-    //         <mesh
-    //             {...props}
-    //             ref={ref}
-    //         >
-    //             <boxGeometry args={[16,9,.01]}/>
-    //             <meshStandardMaterial map={b} />
-             
-    //         </mesh>
-    //     )
-    // }
-    const [divList,setDivList] = useState([{comp: ''},{comp: ''},{comp: ''},{comp: ''}])
+    
+    
     var text = require("../img/In the Court of the Stone Defender.png")
-    const addDiv = () => {
-        setDivList([...divList, {comp: ""}])
-}
+    
 
-    const remDiv = (ind) => {
-        const list = [...divList]
-        list.pop()
-        setDivList(list)
+    
+    const [apiResponse, setApiResponse] = useState([])
+    const [searchTerm, setSearchTerm] = useState('')
+    const [searchType, setSearchType] = useState('first_name')
+    
+    
+    useEffect(() => {
+        callAPI();
+        //postSearch();
+    },[])
+
+    const addResp = (dat) => {
+        setApiResponse(prevState => [...prevState,dat])
+    }
+    const clearResp = () => {
+        setApiResponse([])
     }
 
+    const handleTypeChange = e => {
+        //console.log(e.target.value)
+        setSearchType(e.target.value)
+    }
+    const handleTermChange = e => {
+        //console.log(e.target.value)
+        setSearchTerm(e.target.value)
+    }
+
+    function Comp({e}) {
+        const mod = useLoader(GLTFLoader,e)
+        return <primitive object={mod.scene}/>
+    }
+    
+    const callAPI = () => {
+        axios.get("http://localhost:9000/dbTest")
+            .then(res => res.data)
+            .then((data) => {
+                //console.log(data)
+                clearResp()
+                data.forEach(element => {
+                    element["date_created"] = element["date_created"].slice(0,10)
+                    addResp(element)
+                });
+            }).catch(e => {
+                console.log("Oops, ",e," happened")
+            })
+            
+    }
+
+    const postSearch = () => {
+        axios.post("http://localhost:9000/dbTest", {term: searchTerm, stype: searchType})
+            .then(res => res.data)
+            .then((data) => {
+                //console.log(data)
+                clearResp()
+                data.forEach(element => {
+                    element["date_created"] = element["date_created"].slice(0,10)
+                    addResp(element)
+                });
+            }).catch(e => {
+                console.log("Oops, ",e," happened")
+            })
+        }
+
+    
     return(
         <>
         <div style={{display:'flex',justifyContent:'center', alignItems:'center', marginBottom: '5px'}}>
-            <input type={"search"} style={{width:'60%',height:'20px'}}/>
+            <select name="search-type" onChange={handleTypeChange}>
+                <option value="first_name">Name</option>
+                <option value="last_name">Last Name</option>
+            </select>
+            <input type={"search"} onChange={handleTermChange} style={{width:'60%',height:'20px'}}/>
             
-            <input type={"button"} value="Search models" onClick={addDiv}/>
+            <input type={"button"} value="Search models" onClick={postSearch}/>
             {/* <h1 style={{alignSelf:'center'}}>Browse test</h1> */}
         </div>
         <div class="flex-container" id="share" >
 			
-            {divList.map((singleDiv, index) => (
-            <div class="choice"  id="div1" >
-				<h1>Example {index+1}
+            {apiResponse.map((ap, index) => {
                 
-                <button type='button' onClick={() => remDiv(index)}
-                >Remove</button></h1>
-                
-				<h3>By: Anonymous</h3>
-				<h3>Date: 08.12.2022</h3><hr/>
-                <Canvas style={{width:300,height:260, margin:'auto', border:"2px black solid"}}>
-                    <ambientLight/>
-                    
-                    <Box position = {[0,0,-6]} i ={text} />
-                    <OrbitControls />
-                </Canvas>
-			</div>
-            ))}
+                return(
+                    <div class="choice"  id="div1" key={index}>
+                        <h1>Example {index+1}
+                        
+                        <button type='button' onClick={clearResp}>Remove</button></h1>
+                        
+                        <h3>By: {ap["first_name"]} {ap["last_name"]}</h3>
+                        <h3>Date: {ap["date_created"]}</h3><hr/>
+                        
+                        <Canvas style={{width:300,height:260, margin:'auto'}}>
+                            <ambientLight/>
+                            
+                            {/* <Box position = {[0,0,-6]} i ={text} /> */}
+                            <Suspense fallback={null}>
+                                <Comp e={ap["model_link"]}/>
+                            </Suspense>
+                            <OrbitControls />
+                        </Canvas>
+                    </div>
+                )
+            })}
 			
 		</div>
         </>
