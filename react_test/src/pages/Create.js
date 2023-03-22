@@ -1,6 +1,6 @@
 import React, {useRef, useState, forwardRef} from 'react'
 import {Canvas, useLoader, useThree} from '@react-three/fiber'
-import { TextureLoader} from 'three'
+import { TextureLoader, Vector3} from 'three'
 import { OrbitControls } from '@react-three/drei'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter'
@@ -31,7 +31,7 @@ export function Box(props)
            ref={bref}
            scale={props.scale}
        >
-           <boxGeometry attach = "geometry" args={[1,1,1,16,9]}/>
+           <boxGeometry attach = "geometry" args={[1,1,1,160,160]}/>
            <meshStandardMaterial attach ="material" map={b} wireframe={props.wf} />
            
        </mesh>
@@ -51,7 +51,7 @@ const BoxRef = forwardRef(function BoxTest(props,ref)
             ref={ref}
             scale={props.scale}
         >
-            <boxGeometry attach = "geometry" args={[1,1,1]}/>
+            <boxGeometry attach = "geometry" args={[1,1,1,16,9]}/>
             <meshStandardMaterial attach ="material" map={b} wireframe={props.wf} />
             
         </mesh>
@@ -175,14 +175,31 @@ export default function Create()
 
         //console.log(`${geo.array[face.a]}, ${geo.array[face.b]}, ${geo.array[face.a]}`)
         //geo.setXYZ(face.a,0,0,11)
-        //console.log(geo)
-        //mes.attributes.needsUpdat = true;
-        //console.log(`${geo.array[face.a]}, ${geo.array[face.b]}, ${geo.array[face.a]}`)
-        //mes.attributes.needsUpdate = true;
+        //console.log(meshRef.current)
+        let scl = 10
+        let va = new Vector3();
+        let vb = new Vector3();
+        let vc = new Vector3();
+        va.fromBufferAttribute(geo,face.a);
+        va.z += 5*scl;
+        if(va.z >= 50)
+        {
+            va.z = 50;
+            vb.z = 50;
+            vc.z = 50;
+        }
+        vb.fromBufferAttribute(geo,face.b);
+        vc.fromBufferAttribute(geo,face.c);
+        geo.setXYZ(face.a,va.x,va.y,va.z)
+        //console.log(`${va.x}, ${va.y}, ${va.z}`)
+        geo.setXYZ(face.b,vb.x,vb.y,vb.z)
+        geo.setXYZ(face.c,vc.x,vc.y,vc.z)
+
+        geo.needsUpdate = true;
 
         //Back up box placing functionality, in case point extrusion falls through
-        pos.z = pos.z + .25
-        setBoxes((boxes) => [...boxes,pos])
+        //pos.z = pos.z + .25
+        //setBoxes((boxes) => [...boxes,pos])
         // console.log(boxes)
     }
     return(
@@ -198,7 +215,7 @@ export default function Create()
                     ref={meshRef} 
                     position = {[0,0,-2]}
                     i={text}
-                    scale={[16,9,.01]}
+                    scale={[12,12,.01]}
                     wf={false}
                     onDoubleClick={dCLickHandle}
                     />
