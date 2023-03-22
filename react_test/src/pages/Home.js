@@ -20,7 +20,7 @@ export default function Home()
         }, 30)
         return () => clearInterval(inter)
         
-    }, [user])
+    }, [user,cki] )
 
     const getName = () => {
         if (cki.get("Token")) {

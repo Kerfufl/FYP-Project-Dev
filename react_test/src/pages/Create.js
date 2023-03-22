@@ -40,7 +40,6 @@ const BoxRef = forwardRef(function BoxTest(props,ref)
     const text = props.i
     const b =useLoader(TextureLoader,text)
     const THREE = useThree()
-    
     //useFrame((state,delta) => (ref.current.rotation.x += delta))
     return (
         <mesh
@@ -75,7 +74,7 @@ export default function Create()
     const [fileName,setFileName] = useState('model')
     //const [fileURL,setFileURL] = useState(null)
 
-    const [scl, setScl] = useState(15)
+    const [scl, setScl] = useState(3)
 
     const fileChange = e => {
         //console.log(e.target.value)
@@ -173,9 +172,9 @@ export default function Create()
         let vb = new Vector3();
         let vc = new Vector3();
 
-        let ceil = 5*scl
+        let ceil = 5*(scl*5)
         va.fromBufferAttribute(geo,face.a);
-        va.z += 5*scl;
+        va.z += 5*(5*scl);
 
         if(va.z >= ceil)
         {
@@ -246,6 +245,13 @@ export default function Create()
                 setBoxes(l)
             }
         }>Undo Box</button>
+        
+        <select name="search-type" onChange={(e) => setScl(parseInt(e.target.value))}>
+                <option value="0">flat</option>
+                <option value='3'>5ft</option>
+                <option value="6">10ft</option>
+        </select>
+        {/* <button style={{marginLeft:"40%"}}>Undo Move</button> */}
         </>
         : <>vr</>
         }
