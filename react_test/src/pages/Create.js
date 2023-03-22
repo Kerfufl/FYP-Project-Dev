@@ -1,7 +1,7 @@
 import React, {useRef, useState, forwardRef} from 'react'
 import {Canvas, useLoader, useThree} from '@react-three/fiber'
 import { TextureLoader, Vector3} from 'three'
-import { OrbitControls } from '@react-three/drei'
+import { OrbitControls, PerspectiveCamera } from '@react-three/drei'
 //import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter'
 
@@ -40,18 +40,23 @@ const BoxRef = forwardRef(function BoxTest(props,ref)
     const text = props.i
     const b =useLoader(TextureLoader,text)
     const THREE = useThree()
+
+    
     //useFrame((state,delta) => (ref.current.rotation.x += delta))
     return (
+        <>
         <mesh
             {...props}
             ref={ref}
             scale={props.scale}
+            
         >
             <boxGeometry attach = "geometry" args={[1,1,1,16,9]}/>
             <meshStandardMaterial attach ="material" map={b} wireframe={props.wf} vertexColors={THREE.faceColors}/>
             
             
         </mesh>
+        </>
     )
  }
 )
@@ -72,9 +77,10 @@ export default function Create()
     const [boxes, setBoxes] = useState([])
 
     const [fileName,setFileName] = useState('model')
+    const [aspect,setAspect] = useState([12,12])
     //const [fileURL,setFileURL] = useState(null)
 
-    const [scl, setScl] = useState(3)
+    const [scl, setScl] = useState(0)
 
     const fileChange = e => {
         //console.log(e.target.value)
@@ -89,9 +95,9 @@ export default function Create()
     }
 
     const canvasRef = useRef(null)
-    const meshRef = useRef();
+    const meshRef = useRef()
+    const camRef = useRef()
     //const imp = useLoader(GLTFLoader,impMod)
-    
     
     const exportHandler = (upl=true) => {
         
@@ -205,12 +211,13 @@ export default function Create()
         <Canvas>
                 <ambientLight/>
                 <pointLight/>
+                {/* <PerspectiveCamera makeDefaultref={camRef} position={[0, 0, 0]}/> */}
                 <group ref={canvasRef}>
                     <BoxRef
                     ref={meshRef} 
                     position = {[0,0,-2]}
                     i={text}
-                    scale={[12,12,.01]}
+                    scale={[aspect[0],aspect[1],.01]}
                     wf={false}
                     onDoubleClick={dCLickHandle}
                     />
@@ -246,10 +253,20 @@ export default function Create()
             }
         }>Undo Box</button>
         
-        <select name="search-type" onChange={(e) => setScl(parseInt(e.target.value))}>
-                <option value="0">flat</option>
+        <select name="Scale" onChange={(e) => setScl(parseInt(e.target.value))}>
+                <option value="0">Flat</option>
                 <option value='3'>5ft</option>
                 <option value="6">10ft</option>
+        </select>
+
+        <select name="Aspect" onChange={(e) => {
+            let b = JSON.parse(e.target.value)
+            console.log(b)
+            setAspect(b)
+            }}>
+                <option value={JSON.stringify([16,9])}>Wide</option>
+                <option value={JSON.stringify([12,12])}>Square</option>
+                <option value={JSON.stringify([9,16])}>Tall</option>
         </select>
         {/* <button style={{marginLeft:"40%"}}>Undo Move</button> */}
         </>
