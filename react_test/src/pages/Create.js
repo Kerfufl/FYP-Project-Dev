@@ -1,7 +1,7 @@
 import React, {useRef, useState, forwardRef} from 'react'
 import {Canvas, useLoader, useThree} from '@react-three/fiber'
 import { TextureLoader, Vector3} from 'three'
-import { OrbitControls, PerspectiveCamera } from '@react-three/drei'
+import { OrbitControls } from '@react-three/drei'
 //import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter'
 
@@ -96,7 +96,6 @@ export default function Create()
 
     const canvasRef = useRef(null)
     const meshRef = useRef()
-    const camRef = useRef()
     //const imp = useLoader(GLTFLoader,impMod)
     
     const exportHandler = (upl=true) => {
@@ -211,7 +210,6 @@ export default function Create()
         <Canvas>
                 <ambientLight/>
                 <pointLight/>
-                {/* <PerspectiveCamera makeDefaultref={camRef} position={[0, 0, 0]}/> */}
                 <group ref={canvasRef}>
                     <BoxRef
                     ref={meshRef} 
@@ -257,6 +255,8 @@ export default function Create()
                 <option value="0">Flat</option>
                 <option value='3'>5ft</option>
                 <option value="6">10ft</option>
+                <option value="9">15ft</option>
+                <option value="12">20ft</option>
         </select>
 
         <select name="Aspect" onChange={(e) => {
