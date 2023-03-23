@@ -37,6 +37,10 @@ export function Box(props)
 
 const BoxRef = forwardRef(function BoxTest(props,ref) 
 {
+    /* 
+        Used separate from original box function so that
+        mesh reference can be passed into main function
+    */
     const text = props.i
     const b =useLoader(TextureLoader,text)
     const THREE = useThree()
@@ -74,7 +78,6 @@ Box.defaultProps = {
 export default function Create() 
 {
     const [selImg, setSelImg] = useState(null)
-    const [boxes, setBoxes] = useState([])
 
     const [fileName,setFileName] = useState('model')
     const [aspect,setAspect] = useState([12,12])
@@ -83,13 +86,11 @@ export default function Create()
     const [scl, setScl] = useState(0)
 
     const fileChange = e => {
-        //console.log(e.target.value)
         setFileName(e.target.value)
     }
     
     const imgHandle = (e) => {
         const b = URL.createObjectURL(e.target.files[0])
-        //console.log(b)
         setSelImg(b)
         text=b
     }
@@ -168,7 +169,12 @@ export default function Create()
     }
 
     const dCLickHandle = (e) => {
-        //let pos = e.intersections[0].point
+        /* 
+            Returns intersected face of the model, increasing height by
+            specified scale and updating the mesh so that it can render
+            the changes
+        */
+
         let face = e.intersections[0].face;
         let mes = meshRef.current.geometry
         let geo = mes.attributes.position
@@ -184,22 +190,16 @@ export default function Create()
         if(va.z >= ceil)
         {
             va.z = ceil;
-            vb.z = ceil;
-            vc.z = ceil;
         }
+        //These are not affected but are needed to maintain stability of points
         vb.fromBufferAttribute(geo,face.b);
         vc.fromBufferAttribute(geo,face.c);
+        
         geo.setXYZ(face.a,va.x,va.y,va.z)
-        //console.log(`${va.x}, ${va.y}, ${va.z}`)
         geo.setXYZ(face.b,vb.x,vb.y,vb.z)
         geo.setXYZ(face.c,vc.x,vc.y,vc.z)
-        //console.log(meshRef.current.material)
+        
         geo.needsUpdate = true;
-
-        //Back up box placing functionality, in case point extrusion falls through
-        //pos.z = pos.z + .25
-        //setBoxes((boxes) => [...boxes,pos])
-        // console.log(boxes)
     }
     return(
         <>
@@ -220,11 +220,11 @@ export default function Create()
                     onDoubleClick={dCLickHandle}
                     />
                     
-                    {boxes.map((position,index) => 
+                    {/* {boxes.map((position,index) => 
                         (
                         <Box key={index} position={position} scale={[.5,.5,.5]}/>
                         )
-                    )}
+                    )} */}
                     
                 </group>
                 
@@ -237,21 +237,19 @@ export default function Create()
         : <></>
     }
         <div class="flextest" style={{margin:'auto', width:'50%'}}>
+        
+        { selImg ? <>
         <input 
             type={'file'} 
             onChange= {imgHandle}
             accept={".jpg, .png"}
         />
-        { selImg ? <>
-        <button onClick={() => setBoxes([])}>Clear Boxes</button>
-        <button onClick={() => {
-                let l = [...boxes]
-                l.splice(l.length-1,1)
-                setBoxes(l)
-            }
-        }>Undo Box</button>
-        
-        <select name="Scale" onChange={(e) => setScl(parseInt(e.target.value))}>
+        <select name="Scale" style={{marginLeft:"55%"}} onChange={(e) => {
+            /* 
+                Change the elevation used in extruding vertices
+            */
+            setScl(parseInt(e.target.value))
+            }}>
                 <option value="0">Flat</option>
                 <option value='3'>5ft</option>
                 <option value="6">10ft</option>
@@ -260,38 +258,48 @@ export default function Create()
         </select>
 
         <select name="Aspect" onChange={(e) => {
+            /* 
+                Used to change the aspect ratio of map to
+                better fit a given image 
+            */
             let b = JSON.parse(e.target.value)
-            console.log(b)
             setAspect(b)
             }}>
-                <option value={JSON.stringify([16,9])}>Wide</option>
                 <option value={JSON.stringify([12,12])}>Square</option>
+                <option value={JSON.stringify([16,9])}>Wide</option>
                 <option value={JSON.stringify([9,16])}>Tall</option>
         </select>
-        {/* <button style={{marginLeft:"40%"}}>Undo Move</button> */}
+        
         </>
-        : <>vr</>
+        : <div class="flextest" style={{margin:'auto', width:'50%', flexDirection:'column', marginTop:"20%"}}>
+            Select an image to begin editing
+            <input 
+            type={'file'} 
+            onChange= {imgHandle}
+            accept={".jpg, .png"}
+        />
+            </div>
         }
         </div>
         
             {selImg ? <>
             <br/><hr/>
-            <div class='flextest' style={{ border:'2px solid black', height:'40%'}}>
+            <div class='flextest' style={{height:'40%'}}>
             
             
             <div class='choice' style={{ margin:'auto', justifyContent:'Center'}}>
                 <label>
-                    Bruh 
-                    <input type={"text"} name={"username"} onChange={fileChange}/>
+                    Download Model
+                    <input type={"text"} onChange={fileChange}/>
                     <button onClick={() => exportHandler(false)} >Download Model</button>
                 </label> 
                 
             </div>
             <div class="choice" style={{ margin:'auto', justifyContent:'Center'}}>
-            <label>
-                Bruh <input type={"text"} name={"username"}/>
-                <button onClick={() => exportHandler(true)} >Upload Model</button>
-            </label> 
+                <label>
+                    Share Model <input type={"text"}/>
+                    <button onClick={() => exportHandler(true)} >Upload Model</button>
+                </label>
             </div>
             
             
