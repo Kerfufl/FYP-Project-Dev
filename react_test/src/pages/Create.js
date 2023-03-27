@@ -78,9 +78,11 @@ Box.defaultProps = {
 export default function Create() 
 {
     const [selImg, setSelImg] = useState(null)
+    // const [boxes, setBoxes] = useState([])
 
     const [fileName,setFileName] = useState('model')
     const [aspect,setAspect] = useState([12,12])
+    
     //const [fileURL,setFileURL] = useState(null)
 
     const [scl, setScl] = useState(0)
@@ -174,17 +176,18 @@ export default function Create()
             specified scale and updating the mesh so that it can render
             the changes
         */
-
+        
         let face = e.intersections[0].face;
         let mes = meshRef.current.geometry
         let geo = mes.attributes.position
 
         let va = new Vector3();
+        va.fromBufferAttribute(geo,face.a);
         let vb = new Vector3();
         let vc = new Vector3();
 
         let ceil = 5*(scl*5)
-        va.fromBufferAttribute(geo,face.a);
+        
         va.z += 5*(5*scl);
 
         if(va.z >= ceil)
@@ -200,6 +203,12 @@ export default function Create()
         geo.setXYZ(face.c,vc.x,vc.y,vc.z)
         
         geo.needsUpdate = true;
+
+        //Back up box placing functionality, in case point extrusion falls through
+        //let pos = e.intersections[0].point
+        //pos.z = pos.z + .25
+        //setBoxes((boxes) => [...boxes,pos])
+        // console.log(boxes)
     }
     return(
         <>
@@ -258,10 +267,10 @@ export default function Create()
         </select>
 
         <select name="Aspect" onChange={(e) => {
-            /* 
-                Used to change the aspect ratio of map to
-                better fit a given image 
-            */
+            
+                // Used to change the aspect ratio of map to
+                // better fit a given image 
+            
             let b = JSON.parse(e.target.value)
             setAspect(b)
             }}>
