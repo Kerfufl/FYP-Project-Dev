@@ -2,9 +2,9 @@ import React, {useRef, useState, useEffect, forwardRef} from 'react'
 import {Canvas, useLoader, useThree} from '@react-three/fiber'
 import { TextureLoader, Vector3} from 'three'
 import { OrbitControls } from '@react-three/drei'
-//import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter'
-import Cookies from 'universal-cookie';
+import axios from 'axios'
+import Cookies from 'universal-cookie'
 
 
 import { getDownloadURL, getStorage,ref,uploadBytesResumable } from 'firebase/storage'
@@ -114,6 +114,7 @@ export default function Create()
 
     const cki = new Cookies()
     const [user,setUser] = useState(null)
+    const [date,setDate] = useState(null)
 
     useEffect(() => {
         const inter = setInterval(() => {
@@ -124,6 +125,9 @@ export default function Create()
             } else {
                 setUser(null)
             }
+            let k = new Date()
+            setDate(k.toISOString().split('T')[0])
+            //console.log(date)
         }, 30)
         return () => clearInterval(inter)
         
@@ -165,14 +169,20 @@ export default function Create()
                             console.log("Error with upload: ", error)
                          },
                          () => {
-                            setUplPer(0)
                             getDownloadURL(upTask.snapshot.ref).then((downloadURL) => {
                                 console.log('File available at', downloadURL)
+                                axios.post("http://localhost:9000/model",{
+                                    title:uFileName,
+                                    uname:user,
+                                    date: date,
+                                    url: downloadURL
+                                })
                             })
+                            setTimeout(() => {setUplPer(0)}, 3000)
                          }
                          )
                 }
-
+                
                 else
                 {
                     console.log("direct download goes here")
@@ -330,19 +340,31 @@ export default function Create()
 
             </div>
 
-            <div class="choice" id="upl" style={{ margin:'auto', bottom:"18%"}}>
+            <div class="choice" id="upl" style={{ margin:'auto', bottom:'13%'}}>
             <h3>Share Model</h3>
             {user ?
                 <>
                     <label>
-                        Share Model <input type={"text"} onChange={uFileChange}/>
-                        <button onClick={() => exportHandler(true)} >Upload</button>
+                    <p>Filename: <input type={"text"}  onChange={uFileChange}/> </p>
+                    <button onClick={() => exportHandler(true)} >Upload</button>
                         
                     </label>
                     {uplPer > 0 ?
                         <p>Upload Progress: {uplPer}%</p>
+                        
+                    :
+                    // uplPer  100 ?
+                    //     <p>File uploaded successfully!</p>
+                        
+                    // :
+                        <></>
+                    }
+                    {
+                        uplPer == 100 ?
+                        <p>File uploaded successfully!</p>
                         :
                         <></>
+
                     }
                 </>
                 :

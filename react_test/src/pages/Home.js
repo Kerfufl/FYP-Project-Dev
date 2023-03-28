@@ -8,9 +8,11 @@ export default function Home()
     const cki = new Cookies()
     const [user,setUser] = useState()
 
+
     useEffect(() => {
         const inter = setInterval(() => {
             getName()
+            
         }, 30)
         return () => clearInterval(inter)
         
@@ -28,6 +30,7 @@ export default function Home()
     }
     return(
         <>
+        
         <h1 style={{textAlign: 'center'}}>Welcome to Upcast, {user}</h1>
 		<h1 style={{textAlign: 'center'}}>Which service would you like to access?</h1>
         <input type={"button"} value="Test" onClick={getName}/>
@@ -35,6 +38,8 @@ export default function Home()
 			<div class="choice"><Link to='/Create' class = 'linkbar'><h1>Create</h1></Link></div>
 			<div class="choice"><Link to='/Browse' class= 'linkbar'><h1>Browse</h1></Link></div>
 		</div>
+
+        
         </>
     );
 }

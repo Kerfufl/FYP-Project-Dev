@@ -101,14 +101,24 @@ export default function Share()
             {apiResponse.map((ap, index) => {
                 
                 return(
-                    <div class="choice"  id="div1" key={index}>
-                        <h1>Example {index+1}
-                        
-                        <button type='button' onClick={clearResp}>Remove</button></h1>
+                    <div class="choice"  id="div1" key={index} >
+                        <h1>{ap["title"]}  </h1>
                         
                         <h3>By: {ap["user_name"]}</h3>
                         <h3>Date: {ap["date_created"]}</h3><hr/>
                         
+                        <button type='button' style={{width:'30%', margin:'auto'}} onClick={ () =>
+                        {
+                            const link = document.createElement('a')
+                            link.href = ap['model_link']
+                            //console.log(link.href)
+                            link.download = `${ap["title"]}.glb`
+        
+                            document.body.appendChild(link)
+                            link.click()
+                            document.body.removeChild(link)
+                        }}>Download</button>
+
                         <Canvas style={{width:300,height:260, margin:'auto'}}>
                             <ambientLight/>
                             
