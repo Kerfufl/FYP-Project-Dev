@@ -4,7 +4,6 @@ var router = express.Router();
 
 
 router.get('/', function(req, res, next) {
-    // res.send('bruh');
     
     mdb.then(conn => {
         conn.query("SELECT * FROM fyp_models").then(

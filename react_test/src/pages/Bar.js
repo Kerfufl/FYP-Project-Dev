@@ -43,12 +43,9 @@ export default function Bar() {
 		.then(res => res.data)
 		.then((data)=>
 			{
-				//console.log(data);
 				cki.set("Token", {tok: data.token, uname:username}, {path: "/", sameSite:"None", maxAge: 3600, Secure: true})
 				setLogin(cki.get("Token"))
 				setUseName(data.uname)
-				//ckTest()
-				//window.location.reload("false");
 			})
 	}
 

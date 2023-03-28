@@ -112,8 +112,6 @@ export default function Create()
         exporter.parse(
             canvasRef.current,
             (gltf) => {
-                //const output = JSON.stringify(gltf)
-                //console.log(output)
                 
                 
                 

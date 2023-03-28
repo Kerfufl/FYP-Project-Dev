@@ -20,7 +20,7 @@ router.post('/', function(req,res,next) {
                 "Rando",
                 {expiresIn: "2h"}
             );
-            res.send({message:"Login bruh",token: tok, uname: req.body.user});
+            res.send({message:"Login successful",token: tok, uname: req.body.user});
             //res.send(`${req.body.user} is now logged in`);
             
         }
