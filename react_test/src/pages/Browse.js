@@ -72,7 +72,7 @@ export default function Share()
         axios.post("http://localhost:9000/dbTest", {term: searchTerm, stype: searchType})
             .then(res => res.data)
             .then((data) => {
-                console.log(data)
+                //console.log(data)
                 clearResp()
                 data.forEach(element => {
                     element["date_created"] = element["date_created"].slice(0,10)
@@ -89,7 +89,8 @@ export default function Share()
         <div style={{display:'flex',justifyContent:'center', alignItems:'center', marginBottom: '5px'}}>
             <select name="search-type" onChange={handleTypeChange}>
                 <option value="user_name">Name</option>
-                <option value="last_name">Last Name</option>
+                <option value="title">Title</option>
+                <option value="date_created">Date</option>
             </select>
             <input type={"search"} onChange={handleTermChange} style={{width:'60%',height:'20px'}}/>
             
