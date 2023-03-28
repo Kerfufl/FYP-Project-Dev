@@ -1,14 +1,16 @@
-import React, {useRef, useState, forwardRef} from 'react'
+import React, {useRef, useState, useEffect, forwardRef} from 'react'
 import {Canvas, useLoader, useThree} from '@react-three/fiber'
 import { TextureLoader, Vector3} from 'three'
 import { OrbitControls } from '@react-three/drei'
 //import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter'
+import Cookies from 'universal-cookie';
 
 
 import { getDownloadURL, getStorage,ref,uploadBytesResumable } from 'firebase/storage'
 import initStor from '../components/firebaseInit'
 
+import '../CSS/style.css'
 const stor = getStorage(initStor)
 
 
@@ -81,17 +83,26 @@ export default function Create()
     // const [boxes, setBoxes] = useState([])
 
     const [fileName,setFileName] = useState('model')
+    const [uFileName,setUFileName] = useState('model')
     const [aspect,setAspect] = useState([12,12])
-    
+    const [uplPer, setUplPer] = useState(0)
     //const [fileURL,setFileURL] = useState(null)
 
     const [scl, setScl] = useState(0)
 
-    const fileChange = e => {
+    const dFileChange = e => {
         setFileName(e.target.value)
+        
+    }
+
+    const uFileChange = e => {
+        setUFileName(e.target.value)
     }
     
     const imgHandle = (e) => {
+        if(cki.get("Token")) {
+            console.log(cki.get("Token").uname)
+        }
         const b = URL.createObjectURL(e.target.files[0])
         setSelImg(b)
         text=b
@@ -100,6 +111,23 @@ export default function Create()
     const canvasRef = useRef(null)
     const meshRef = useRef()
     //const imp = useLoader(GLTFLoader,impMod)
+
+    const cki = new Cookies()
+    const [user,setUser] = useState(null)
+
+    useEffect(() => {
+        const inter = setInterval(() => {
+            if (cki.get("Token"))
+            {
+                //console.log(cki.get("Token").uname)
+                setUser(cki.get('Token').uname)
+            } else {
+                setUser(null)
+            }
+        }, 30)
+        return () => clearInterval(inter)
+        
+    }, [user,cki] )
     
     const exportHandler = (upl=true) => {
         
@@ -113,14 +141,12 @@ export default function Create()
             canvasRef.current,
             (gltf) => {
                 
-                
-                
                 const glbBlob = new Blob([gltf], { type: 'application/octet-stream'})
                 
                     
                 if (upl)   
                 {
-                    const storRef = ref(stor,`bruh/${fileName}.glb`)
+                    const storRef = ref(stor,`${cki.get("Token").uname}/${uFileName}.glb`)
                     
                     const metadata = 
                     {
@@ -131,12 +157,15 @@ export default function Create()
                     upTask.on(
                         "state_changed", 
                         (snapshot) => {
-
+                            let prog = Math.round(snapshot.bytesTransferred/snapshot.totalBytes * 100)
+                            console.log(prog + "%")
+                            setUplPer(prog)
                         },
                          (error) => {
                             console.log("Error with upload: ", error)
                          },
                          () => {
+                            setUplPer(0)
                             getDownloadURL(upTask.snapshot.ref).then((downloadURL) => {
                                 console.log('File available at', downloadURL)
                             })
@@ -292,21 +321,35 @@ export default function Create()
             {selImg ? <>
             <br/><hr/>
             <div class='flextest' style={{height:'40%'}}>
-            
-            
-            <div class='choice' style={{ margin:'auto', justifyContent:'Center'}}>
+            <div class='choice' id="upl" style={{ justifyContent:'Center'}}>
+                <h3>Download Model</h3>
                 <label>
-                    Download Model
-                    <input type={"text"} onChange={fileChange}/>
-                    <button onClick={() => exportHandler(false)} >Download Model</button>
-                </label> 
-                
-            </div>
-            <div class="choice" style={{ margin:'auto', justifyContent:'Center'}}>
-                <label>
-                    Share Model <input type={"text"}/>
-                    <button onClick={() => exportHandler(true)} >Upload Model</button>
+                    <p>Filename: <input type={"text"}  onChange={dFileChange}/> </p>
+                    <button onClick={() => exportHandler(false)} >Download</button>
                 </label>
+
+            </div>
+
+            <div class="choice" id="upl" style={{ margin:'auto', bottom:"18%"}}>
+            <h3>Share Model</h3>
+            {user ?
+                <>
+                    <label>
+                        Share Model <input type={"text"} onChange={uFileChange}/>
+                        <button onClick={() => exportHandler(true)} >Upload</button>
+                        
+                    </label>
+                    {uplPer > 0 ?
+                        <p>Upload Progress: {uplPer}%</p>
+                        :
+                        <></>
+                    }
+                </>
+                :
+                <label>
+                    Please log in to be able to share
+                </label>
+            }
             </div>
             
             

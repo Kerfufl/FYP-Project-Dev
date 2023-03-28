@@ -9,10 +9,23 @@
 }
 .choice{
     border: 2px solid black;
+	/* border-spacing: 20%; */
 	display: flex;
 	flex-direction: column;
 	text-align: center;
     margin: auto;
+}
+.aligncenter{
+	margin-left: auto;
+	margin-right: auto;
+}
+#upl{
+	width: 40%;
+	height: 50%;
+	border: none;
+
+	position: relative;
+	bottom: 20%
 }
 			
 .home-div 

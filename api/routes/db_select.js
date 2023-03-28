@@ -18,9 +18,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/', function(req, res, next) {
-    // res.send('bruh');
-    
-    b.then(conn => {
+    mdb.then(conn => {
         conn.query(`SELECT * FROM fyp_models where ${String(req.body.stype)} = '${String(req.body.term)}'`).then(
             (rows => {
                 //console.log(rows);

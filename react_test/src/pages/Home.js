@@ -10,13 +10,7 @@ export default function Home()
 
     useEffect(() => {
         const inter = setInterval(() => {
-            if (cki.get("Token"))
-            {
-                //console.log(cki.get("Token").uname)
-                setUser(cki.get('Token').uname)
-            } else {
-                setUser("new user")
-            }
+            getName()
         }, 30)
         return () => clearInterval(inter)
         

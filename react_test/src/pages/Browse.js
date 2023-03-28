@@ -3,6 +3,7 @@ import {Canvas, useLoader} from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import axios from 'axios'
+import Cookies from 'universal-cookie';
 
 import '../index.css';
 import {Box} from './Create';
@@ -14,11 +15,11 @@ export default function Share()
     
     var text = require("../img/In the Court of the Stone Defender.png")
     
-
+    const cki = new Cookies()
     
     const [apiResponse, setApiResponse] = useState([])
     const [searchTerm, setSearchTerm] = useState('')
-    const [searchType, setSearchType] = useState('first_name')
+    const [searchType, setSearchType] = useState('user_name')
     
     
     useEffect(() => {
@@ -55,6 +56,10 @@ export default function Share()
                 clearResp()
                 data.forEach(element => {
                     element["date_created"] = element["date_created"].slice(0,10)
+                    //Marks a logged in user's creation, if applicable
+                    if(cki.get("Token") && element["user_name"] ==cki.get("Token").uname) {
+                        element["user_name"] = element["user_name"] + "**"
+                    }
                     addResp(element)
                 });
             }).catch(e => {
@@ -67,7 +72,7 @@ export default function Share()
         axios.post("http://localhost:9000/dbTest", {term: searchTerm, stype: searchType})
             .then(res => res.data)
             .then((data) => {
-                //console.log(data)
+                console.log(data)
                 clearResp()
                 data.forEach(element => {
                     element["date_created"] = element["date_created"].slice(0,10)
@@ -83,7 +88,7 @@ export default function Share()
         <>
         <div style={{display:'flex',justifyContent:'center', alignItems:'center', marginBottom: '5px'}}>
             <select name="search-type" onChange={handleTypeChange}>
-                <option value="first_name">Name</option>
+                <option value="user_name">Name</option>
                 <option value="last_name">Last Name</option>
             </select>
             <input type={"search"} onChange={handleTermChange} style={{width:'60%',height:'20px'}}/>
@@ -101,7 +106,7 @@ export default function Share()
                         
                         <button type='button' onClick={clearResp}>Remove</button></h1>
                         
-                        <h3>By: {ap["first_name"]} {ap["last_name"]}</h3>
+                        <h3>By: {ap["user_name"]}</h3>
                         <h3>Date: {ap["date_created"]}</h3><hr/>
                         
                         <Canvas style={{width:300,height:260, margin:'auto'}}>
