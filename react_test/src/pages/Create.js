@@ -87,8 +87,8 @@ export default function Create()
     const [aspect,setAspect] = useState([12,12])
     const [uplPer, setUplPer] = useState(0)
     //const [fileURL,setFileURL] = useState(null)
-
     const [scl, setScl] = useState(0)
+    const [tags, setTags] = useState("")
 
     const dFileChange = e => {
         setFileName(e.target.value)
@@ -97,6 +97,10 @@ export default function Create()
 
     const uFileChange = e => {
         setUFileName(e.target.value)
+    }
+
+    const tagChange = e => {
+        setTags(e.target.value)
     }
     
     const imgHandle = (e) => {
@@ -169,13 +173,21 @@ export default function Create()
                             console.log("Error with upload: ", error)
                          },
                          () => {
+
+                            let p = tags.split(',')
+                            p.map((t, ind) => {
+                                p[ind] = '"' + t.trim() + '"'
+                                console.log(p[ind])
+                            })
+
                             getDownloadURL(upTask.snapshot.ref).then((downloadURL) => {
                                 console.log('File available at', downloadURL)
                                 axios.post("http://localhost:9000/model",{
                                     title:uFileName,
                                     uname:user,
                                     date: date,
-                                    url: downloadURL
+                                    url: downloadURL,
+                                    tag: p
                                 })
                             })
                             setTimeout(() => {setUplPer(0)}, 3000)
@@ -301,6 +313,8 @@ export default function Create()
                 <option value="6">10ft</option>
                 <option value="9">15ft</option>
                 <option value="12">20ft</option>
+                <option value="15">25ft</option>
+                <option value="18">30ft</option>
         </select>
 
         <select name="Aspect" onChange={(e) => {
@@ -340,23 +354,23 @@ export default function Create()
 
             </div>
 
-            <div class="choice" id="upl" style={{ margin:'auto', bottom:'13%'}}>
+            <div class="choice" id="upl" style={{ bottom:'21'}}>
             <h3>Share Model</h3>
             {user ?
                 <>
-                    <label>
-                    <p>Filename: <input type={"text"}  onChange={uFileChange}/> </p>
-                    <button onClick={() => exportHandler(true)} >Upload</button>
-                        
+                    <label style={{}}>
+                        <p style={{width:'100%'}}>Filename: <input type={"text"}  onChange={uFileChange}/> </p>
                     </label>
+                        <label style={{position:'relative', left:'10px'}}>
+                        <p style={{width:'100%'}}>Tags: <input type={"text"} onChange={tagChange} /> </p>
+                    </label>
+                    <button style={{width:'50%', alignSelf:'center'}} onClick={() => exportHandler(true)} >Upload</button>
+                        
+                    
                     {uplPer > 0 ?
                         <p>Upload Progress: {uplPer}%</p>
                         
                     :
-                    // uplPer  100 ?
-                    //     <p>File uploaded successfully!</p>
-                        
-                    // :
                         <></>
                     }
                     {

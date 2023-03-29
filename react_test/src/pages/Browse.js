@@ -6,6 +6,7 @@ import axios from 'axios'
 import Cookies from 'universal-cookie';
 
 import '../index.css';
+import '../CSS/style.css';
 import {Box} from './Create';
 //import Box from '../Extra Functions/rend';
 
@@ -91,6 +92,7 @@ export default function Share()
                 <option value="user_name">Name</option>
                 <option value="title">Title</option>
                 <option value="date_created">Date</option>
+                <option value="tags">Tag</option>
             </select>
             <input type={"search"} onChange={handleTermChange} style={{width:'60%',height:'20px'}}/>
             
@@ -104,9 +106,9 @@ export default function Share()
                 return(
                     <div class="choice"  id="div1" key={index} >
                         <h1>{ap["title"]}  </h1>
-                        
-                        <h3>By: {ap["user_name"]}</h3>
-                        <h3>Date: {ap["date_created"]}</h3><hr/>
+                        <h3 style={{lineHeight:.8}}>By: {ap["user_name"]}</h3>
+                        <h3>Date: {ap["date_created"]}</h3>
+                        <h5>Tags: {ap["tags"].join(', ')}</h5>
                         
                         <button type='button' style={{width:'30%', margin:'auto'}} onClick={ () =>
                         {
