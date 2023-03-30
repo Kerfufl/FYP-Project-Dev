@@ -99,12 +99,12 @@ export default function Share()
             <input type={"button"} value="Search models" onClick={postSearch}/>
             {/* <h1 style={{alignSelf:'center'}}>Browse test</h1> */}
         </div>
-        <div class="flex-container" id="share" >
+        <div className="flex-container" id="share" >
 			
             {apiResponse.map((ap, index) => {
                 
                 return(
-                    <div class="choice"  id="div1" key={index} >
+                    <div className="choice"  id="div1" key={index} >
                         <h1>{ap["title"]}  </h1>
                         <h3 style={{lineHeight:.8}}>By: {ap["user_name"]}</h3>
                         <h3>Date: {ap["date_created"]}</h3>

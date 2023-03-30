@@ -294,7 +294,7 @@ export default function Create()
         </div>
         : <></>
     }
-        <div class="flextest" style={{margin:'auto', width:'50%'}}>
+        <div className="flextest" style={{margin:'auto', width:'50%'}}>
         
         { selImg ? <>
         <input 
@@ -331,7 +331,7 @@ export default function Create()
         </select>
         
         </>
-        : <div class="flextest" style={{margin:'auto', width:'50%', flexDirection:'column', marginTop:"20%"}}>
+        : <div className="flextest" style={{margin:'auto', width:'50%', flexDirection:'column', marginTop:"20%"}}>
             Select an image to begin editing
             <input 
             type={'file'} 
@@ -344,8 +344,8 @@ export default function Create()
         
             {selImg ? <>
             <br/><hr/>
-            <div class='flextest' style={{height:'40%'}}>
-            <div class='choice' id="upl" style={{ justifyContent:'Center'}}>
+            <div className='flextest' style={{height:'40%'}}>
+            <div className='choice' id="upl" style={{ justifyContent:'Center'}}>
                 <h3>Download Model</h3>
                 <label>
                     <p>Filename: <input type={"text"}  onChange={dFileChange}/> </p>
@@ -354,7 +354,7 @@ export default function Create()
 
             </div>
 
-            <div class="choice" id="upl" style={{ bottom:'21'}}>
+            <div className="choice" id="upl" style={{ bottom:'21'}}>
             <h3>Share Model</h3>
             {user ?
                 <>

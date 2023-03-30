@@ -34,9 +34,9 @@ export default function Home()
         <h1 style={{textAlign: 'center'}}>Welcome to Upcast, {user}</h1>
 		<h1 style={{textAlign: 'center'}}>Which service would you like to access?</h1>
         <input type={"button"} value="Test" onClick={getName}/>
-		<div class="flextest" style={{border:'2px black solid', height:'70%'}}>
-			<div class="choice"><Link to='/Create' class = 'linkbar'><h1>Create</h1></Link></div>
-			<div class="choice"><Link to='/Browse' class= 'linkbar'><h1>Browse</h1></Link></div>
+		<div className="flextest" style={{border:'2px black solid', height:'70%'}}>
+			<div className="choice"><Link to='/Create' className = 'linkbar'><h1>Create</h1></Link></div>
+			<div className="choice"><Link to='/Browse' className= 'linkbar'><h1>Browse</h1></Link></div>
 		</div>
 
         
