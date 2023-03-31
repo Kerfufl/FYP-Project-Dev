@@ -1,16 +1,16 @@
-import React, {useRef, useState, useEffect, forwardRef} from 'react'
-import {Canvas, useLoader, useThree} from '@react-three/fiber'
-import { TextureLoader, Vector3} from 'three'
-import { OrbitControls } from '@react-three/drei'
-import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter'
-import axios from 'axios'
-import Cookies from 'universal-cookie'
+import React, {useRef, useState, useEffect, forwardRef} from 'react';
+import {Canvas, useLoader, useThree} from '@react-three/fiber';
+import { TextureLoader, Vector3} from 'three';
+import { OrbitControls } from '@react-three/drei';
+import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter';
+import axios from 'axios';
+import Cookies from 'universal-cookie';
 
 
-import { getDownloadURL, getStorage,ref,uploadBytesResumable } from 'firebase/storage'
-import initStor from '../components/firebaseInit'
+import { getDownloadURL, getStorage,ref,uploadBytesResumable } from 'firebase/storage';
+import initStor from '../components/firebaseInit';
 
-import '../CSS/style.css'
+import '../CSS/style.css';
 const stor = getStorage(initStor)
 
 
