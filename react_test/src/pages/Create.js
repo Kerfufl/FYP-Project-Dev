@@ -24,8 +24,8 @@ export function Box(props)
     const bref = useRef(null)
     const text = props.i
     const b =useLoader(TextureLoader,text)
-   
-   
+
+    
     //useFrame((state,delta) => (ref.current.rotation.x += delta))
     return (
         <mesh
