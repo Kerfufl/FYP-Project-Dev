@@ -50,10 +50,13 @@ export default function Share()
     }
     
     const callAPI = () => {
+        /*
+			Retrieves all stored models from database, adding them to an array
+            Runs whenever page is entered through useEffect 
+		*/
         axios.get("http://localhost:9000/dbTest")
             .then(res => res.data)
             .then((data) => {
-                //console.log(data)
                 clearResp()
                 data.forEach(element => {
                     element["date_created"] = element["date_created"].slice(0,10)
@@ -70,6 +73,9 @@ export default function Share()
     }
 
     const postSearch = () => {
+        /*
+			Returns specific results by querying by specific columns 
+		*/
         axios.post("http://localhost:9000/dbTest", {term: searchTerm, stype: searchType})
             .then(res => res.data)
             .then((data) => {

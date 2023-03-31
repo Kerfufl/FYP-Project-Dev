@@ -11,18 +11,27 @@ router.post('/', function(req,res,next) {
       .then((usr => {
         if (usr.length == 0)
         {
-            res.send("No users withh that username");
+            res.send({logi: false, message:"No such user"});
         } else {
-            const tok = jwt.sign( 
-                {
-                    user: req.body.user,
-                },
-                "Rando",
-                {expiresIn: "2h"}
-            );
-            res.send({message:"Login successful",token: tok, uname: req.body.user});
-            //res.send(`${req.body.user} is now logged in`);
-            
+            bcry.compare(req.body.pass,usr[0].pass)
+            .then((passCheck) => {
+                console.log(passCheck)
+                if(passCheck) {
+                    const tok = jwt.sign( 
+                    {
+                        user: req.body.user,
+                    },
+                    "Rando",
+                    {expiresIn: "2h"}
+                    );
+                    res.send({logi:true, message:"Login successful", token: tok, uname: req.body.user});
+                    //res.send(`${req.body.user} is now logged in`);
+                } else {
+                    res.send({logi:false, message:"Incorrect password"})
+                }
+        }).catch((e) => {
+            res.send({logi:false, message:"Incorrect password", error:e})
+        })
         }
       }))
     })

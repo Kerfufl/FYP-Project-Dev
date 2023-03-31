@@ -13,6 +13,9 @@ export default function Bar() {
 	const cki = new cookies();
 	
 	useEffect(() => {
+		/*
+			When page is loaded or login function is altered, update login status on nav bar 
+		*/
         if (cki.get("Token"))
         {
             setLogin(true)
@@ -30,6 +33,10 @@ export default function Bar() {
 	}
 
 	const regi = () => {
+
+		/*
+			Sends username and password to be registered in database, if not already registered 
+		*/
 		axios.post('http://localhost:9000/users',{user: username, pass: password})
 		.then(res => res.data)
 		.then((data)=>
@@ -39,32 +46,31 @@ export default function Bar() {
 	}
 
 	const logi = () => {
+		/*
+			Sends username and password to check if user exists, then if password is correct,
+			setting a browser cookie on success
+		*/
 		axios.post('http://localhost:9000/logi',{user: username, pass: password})
 		.then(res => res.data)
 		.then((data)=>
 			{
-				cki.set("Token", {tok: data.token, uname:username}, {path: "/", sameSite:"None", maxAge: 3600, Secure: true})
-				setLogin(cki.get("Token"))
-				setUseName(data.uname)
+				if (data.logi)
+				{
+					console.log(data.message)
+					cki.set("Token", {tok: data.token, uname:username}, {path: "/", sameSite:"None", maxAge: 3600, Secure: true})
+					setLogin(cki.get("Token"))
+					setUseName(data.uname)
+				} else {
+					console.log(data.message)
+				}
 			})
 	}
 
 	const unlog = () => {
 		cki.remove("Token")
 		setLogin(null)
-		//window.location.reload("false");
 	}
-
-	const ckTest = () => {
-		let b =cki.get("Token")
-		if(b)
-		{
-			console.log(b['uname']);
-		} else {
-			console.log("No valid token");
-		}
-		
-	}
+	
     return(
         <>
         <div class="flex-container">

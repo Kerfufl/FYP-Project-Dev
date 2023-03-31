@@ -18,22 +18,25 @@ var text = require("../img/In the Court of the Stone Defender.png")
 
 export function Box(props)
 {
-   const bref = useRef(null)
-   const text = props.i
-   const b =useLoader(TextureLoader,text)
+    /*
+		Deprecated model function, superceded by forwardRef box
+    */
+    const bref = useRef(null)
+    const text = props.i
+    const b =useLoader(TextureLoader,text)
    
    
-   //useFrame((state,delta) => (ref.current.rotation.x += delta))
-   return (
-       <mesh
-           {...props}
-           ref={bref}
-           scale={props.scale}
-       >
-           <boxGeometry attach = "geometry" args={[1,1,1,160,160]}/>
-           <meshStandardMaterial attach ="material" map={b} wireframe={props.wf}/>
-           
-       </mesh>
+    //useFrame((state,delta) => (ref.current.rotation.x += delta))
+    return (
+        <mesh
+            {...props}
+            ref={bref}
+            scale={props.scale}
+        >
+            <boxGeometry attach = "geometry" args={[1,1,1,160,160]}/>
+            <meshStandardMaterial attach ="material" map={b} wireframe={props.wf}/>
+            
+        </mesh>
    )
 }
 
@@ -121,6 +124,10 @@ export default function Create()
     const [date,setDate] = useState(null)
 
     useEffect(() => {
+        /*
+			Checks for login status on an interval
+            Used to determine if user can upload models
+		*/
         const inter = setInterval(() => {
             if (cki.get("Token"))
             {
@@ -318,9 +325,10 @@ export default function Create()
         </select>
 
         <select name="Aspect" onChange={(e) => {
-            
-                // Used to change the aspect ratio of map to
-                // better fit a given image 
+            /*
+                Used to change the aspect ratio of map to
+                better fit a given image
+            */
             
             let b = JSON.parse(e.target.value)
             setAspect(b)
